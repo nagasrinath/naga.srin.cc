@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ term.name }} &middot; {{ config.title }}{% endblock title %}
+{% block description %}posts tagged {{ term.name }}{% endblock description %}
+
+{% block content %}
+<header class="header">
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
+</header>
+
+<main class="writing">
+  <p class="section-label">tag: {{ term.name }}</p>
+  <div class="post-list">
+    {% for page in term.pages %}
+    <a class="post-row" href="{{ page.permalink }}">
+      <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+      <span class="post-title">{{ page.title }}</span>
+      {% if page.description %}
+      <span class="post-desc">{{ page.description }}</span>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</main>
+
+<footer class="footer">
+  <span class="prompt">$</span> <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.back_to_index }}</a>
+</footer>
+{% endblock content %}

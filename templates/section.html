@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.extra.ui.writing_label }} &middot; {{ config.title }}{% endblock title %}
+{% block description %}all posts by {{ config.title }}{% endblock description %}
+{% block og_title %}{{ config.extra.ui.writing_label }} &middot; {{ config.title }}{% endblock og_title %}
+{% block og_description %}all posts by {{ config.title }}{% endblock og_description %}
+
+{% block content %}
+<header class="header">
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
+</header>
+
+<main class="writing">
+  <p class="section-label">{{ config.extra.ui.writing_label }}</p>
+  <div class="post-list">
+    {% for page in section.pages %}
+    <a class="post-row" href="{{ page.permalink }}">
+      <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+      <span class="post-title">{{ page.title }}</span>
+      {% if page.description %}
+      <span class="post-desc">{{ page.description }}</span>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</main>
+
+<footer class="footer">
+  <span class="prompt">$</span> <a href="{{ get_url(path="/") }}">{{ config.extra.ui.back_to_index }}</a>
+</footer>
+{% endblock content %}

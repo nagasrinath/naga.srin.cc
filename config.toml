@@ -1,0 +1,67 @@
+base_url = "https://naga.srin.cc"
+title = "naga"
+description = "i build and break distributed systems, then run them on hardware i can hear."
+default_language = "en"
+compile_sass = true
+build_search_index = false
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+
+taxonomies = [
+    { name = "tags", feed = false },
+]
+
+[markdown]
+highlight_code = true
+highlight_theme = "solarized-light"
+
+[extra]
+author = "naga"
+blog_enabled = false
+# reference date the footer "uptime" counter counts up from
+dob = "2005-05-24"
+
+location = "blr"
+avatar_alt = "portrait of naga"
+footer_status = "still here, still self-hosting "
+
+bio = [
+  "i build and break distributed systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
+  "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack. open source or it didn't happen.",
+]
+
+interests = [
+  "linux",
+  "distributed systems",
+  "self-hosting",
+  "k8s",
+  "ai agents",
+  "oss",
+]
+
+[[extra.links]]
+label = "srin.cc"
+url = "https://srin.cc"
+
+[[extra.links]]
+label = "github"
+url = "https://github.com/nagasrinath"
+
+[[extra.links]]
+label = "linkedin"
+url = "https://www.linkedin.com/in/nagasrinath"
+
+[[extra.links]]
+label = "tangled"
+url = "https://tangled.org/srin.cc"
+
+[[extra.links]]
+label = "mail"
+url = "mailto:naga@srin.cc"
+
+[extra.ui]
+writing_label = "writing"
+tags_label = "tags"
+all_posts = "all posts"
+back_to_index = "back to index"
+not_found = "no such file or directory"

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} &middot; {{ config.title }}{% endblock title %}
+{% block description %}{{ page.description }}{% endblock description %}
+{% block og_title %}{{ page.title }}{% endblock og_title %}
+{% block og_description %}{{ page.description }}{% endblock og_description %}
+
+{% block content %}
+<header class="header">
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
+</header>
+
+<main>
+  <article>
+    <p class="post-meta">{{ page.date | date(format="%Y-%m-%d") }}</p>
+    <h1 class="post-title-main">{{ page.title }}</h1>
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
+  </article>
+</main>
+
+<footer class="footer">
+  <span class="prompt">$</span> <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.back_to_index }}</a>
+</footer>
+{% endblock content %}

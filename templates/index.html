@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="header">
+  <picture>
+    <source srcset="{{ get_url(path="avatar-dark.png") }}" media="(prefers-color-scheme: dark)">
+    <img class="avatar" src="{{ get_url(path="avatar-light.png") }}" alt="{{ config.extra.avatar_alt }}">
+  </picture>
+  <div>
+    <p class="name">{{ config.title }}</p>
+    {% set dob_ts = config.extra.dob | date(format="%s") | int %}
+    {% set uptime_days = ((now(timestamp=true) - dob_ts) / 86400) | int %}
+    <p class="tagline">{{ config.extra.location }} &middot; <span class="prompt">$</span> uptime <span id="uptime" data-dob="{{ dob_ts }}">{{ uptime_days }}d</span></p>
+  </div>
+</header>
+
+<section class="bio">
+  {% for para in config.extra.bio %}
+  <p{% if not loop.first %} class="muted"{% endif %}>{{ para }}</p>
+  {% endfor %}
+  <div class="tags-row">
+    {% for interest in config.extra.interests %}
+    <span class="tag">{{ interest }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+<nav class="links" aria-label="elsewhere">
+  {% for link in config.extra.links %}
+  <a href="{{ link.url }}">{{ link.label }}</a>
+  {% endfor %}
+</nav>
+
+{% if config.extra.blog_enabled %}
+{% set blog = get_section(path="blog/_index.md") %}
+<main class="writing">
+  <p class="section-label">{{ config.extra.ui.writing_label }}</p>
+  <div class="post-list">
+    {% for page in blog.pages | slice(end=5) %}
+    <a class="post-row" href="{{ page.permalink }}">
+      <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+      <span class="post-title">{{ page.title }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  <a class="all-posts" href="{{ get_url(path="blog") }}">{{ config.extra.ui.all_posts }} &rarr;</a>
+</main>
+{% endif %}
+
+<footer class="footer">
+  <span class="prompt">$</span> {{ config.extra.footer_status }}<span class="caret"></span>
+</footer>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}404 &middot; {{ config.title }}{% endblock title %}
+{% block description %}page not found{% endblock description %}
+
+{% block content %}
+<main class="writing">
+  <p><span class="prompt">$</span> {{ config.extra.ui.not_found }}</p>
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
+</main>
+{% endblock content %}

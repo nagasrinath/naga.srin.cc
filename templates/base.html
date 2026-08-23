@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ config.title }}{% endblock title %}</title>
+<meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
+<meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock og_title %}">
+<meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock og_description %}">
+<meta property="og:image" content="{{ get_url(path="avatar-light.png") }}">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fdf6e3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#002b36" media="(prefers-color-scheme: dark)">
+<link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
+<link rel="stylesheet" href="{{ get_url(path="style.css") }}">
+</head>
+<body>
+<div class="column">
+{% block content %}{% endblock content %}
+</div>
+{% block scripts %}
+<script src="{{ get_url(path="caret.js") }}" defer></script>
+<script src="{{ get_url(path="uptime.js") }}" defer></script>
+{% endblock scripts %}
+</body>
+</html>

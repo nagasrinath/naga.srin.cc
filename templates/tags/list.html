@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.extra.ui.tags_label }} &middot; {{ config.title }}{% endblock title %}
+{% block description %}all tags{% endblock description %}
+
+{% block content %}
+<header class="header">
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
+</header>
+
+<main class="writing">
+  <p class="section-label">{{ config.extra.ui.tags_label }}</p>
+  <div class="tags-row">
+    {% for term in terms %}
+    <a class="tag" href="{{ term.permalink }}">{{ term.name }}</a>
+    {% endfor %}
+  </div>
+</main>
+
+<footer class="footer">
+  <span class="prompt">$</span> <a href="{{ get_url(path="/") }}">{{ config.extra.ui.back_to_index }}</a>
+</footer>
+{% endblock content %}

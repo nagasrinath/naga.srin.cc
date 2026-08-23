@@ -1,0 +1,9 @@
+services:
+  naga-site:
+    image: ghcr.io/nagasrinath/naga-site:latest
+    restart: unless-stopped
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

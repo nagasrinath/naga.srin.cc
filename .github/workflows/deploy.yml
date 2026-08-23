@@ -1,0 +1,99 @@
+# Builds naga.srin.cc (a static Zola site, see Dockerfile) in CI, pushes
+# it to GHCR as a tiny nginx image, then deploys compose.yaml to a
+# VPS over SSH. The VPS never builds anything — it only pulls the image
+# CI just pushed. There's no runtime config: the site has no server-side
+# secrets, so there's no .env to generate.
+#
+# Required secrets, scoped to the "prod" GitHub Environment (Settings →
+# Environments → prod → Environment secrets — NOT repo-level secrets;
+# the `deploy` job below opts into that environment so it can read them):
+#   VPS_HOST     - VPS IP/hostname
+#   VPS_USER     - SSH user to deploy as
+#   VPS_SSH_KEY  - private half of a dedicated deploy keypair (public half
+#                  goes in that user's ~/.ssh/authorized_keys on the VPS)
+#   GHCR_PAT     - classic PAT with `read:packages` scope, so the VPS can
+#                  pull the image from GHCR — only needed if the package
+#                  ends up private; the default here is a public package
+#                  (it's static HTML, nothing sensitive in it), in which
+#                  case this secret and the docker-login step that uses it
+#                  can be skipped entirely.
+#
+# Variables (not secrets — Settings → Environments → prod → Variables,
+# or repo-level variables under Settings → Secrets and variables → Actions):
+#   VPS_APP_DIR  - path on the VPS holding compose.yaml (falls back
+#                  to /opt/naga-site if unset)
+#
+# One-time VPS setup (not automated):
+#   mkdir -p /opt/naga-site
+#   # add the deploy keypair's public half to this user's ~/.ssh/authorized_keys
+#   # the "proxy" external network (compose.yaml) must already exist —
+#   # create it once with `docker network create proxy` if the reverse
+#   # proxy didn't already set it up, then point the reverse proxy at this
+#   # container (service "web", port 80)
+
+name: Deploy prod
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/nagasrinath/naga-site:${{ github.sha }}
+            ghcr.io/nagasrinath/naga-site:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "compose.yaml"
+          target: ${{ vars.VPS_APP_DIR || '/opt/naga-site' }}
+          strip_components: 0
+
+      - uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd "${{ vars.VPS_APP_DIR || '/opt/naga-site' }}"
+            docker compose -f compose.yaml pull
+            docker compose -f compose.yaml up -d
+            docker image prune -f
