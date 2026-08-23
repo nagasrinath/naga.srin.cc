@@ -12,11 +12,10 @@
 #   VPS_SSH_KEY  - private half of a dedicated deploy keypair (public half
 #                  goes in that user's ~/.ssh/authorized_keys on the VPS)
 #   GHCR_PAT     - classic PAT with `read:packages` scope, so the VPS can
-#                  pull the image from GHCR — only needed if the package
-#                  ends up private; the default here is a public package
-#                  (it's static HTML, nothing sensitive in it), in which
-#                  case this secret and the docker-login step that uses it
-#                  can be skipped entirely.
+#                  pull the image from GHCR. Required because the package
+#                  is private; if it's ever made public, this secret and
+#                  the docker-login step in the deploy script can be
+#                  dropped.
 #
 # Variables (not secrets — Settings → Environments → prod → Variables,
 # or repo-level variables under Settings → Secrets and variables → Actions):
@@ -94,6 +93,8 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR || '/opt/naga-site' }}"
+            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker compose -f compose.yaml pull
             docker compose -f compose.yaml up -d
             docker image prune -f
+            docker logout ghcr.io
