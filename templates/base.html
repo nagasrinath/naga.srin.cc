@@ -15,13 +15,15 @@
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
 <link rel="stylesheet" href="{{ get_url(path="style.css") }}">
 </head>
-<body>
+<body data-location="{{ config.extra.location }}">
 <div class="column">
 {% block content %}{% endblock content %}
 </div>
 {% block scripts %}
 <script src="{{ get_url(path="caret.js") }}" defer></script>
 <script src="{{ get_url(path="uptime.js") }}" defer></script>
+<script src="{{ get_url(path="typewriter.js") }}" defer></script>
+<script src="{{ get_url(path="terminal.js") }}" defer></script>
 {% endblock scripts %}
 </body>
 </html>

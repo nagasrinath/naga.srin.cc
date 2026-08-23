@@ -1,5 +1,5 @@
 base_url = "https://naga.srin.cc"
-title = "naga"
+title = "Naga Srinath"
 description = "i build and break systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other."
 default_language = "en"
 compile_sass = true
@@ -46,6 +46,10 @@ url = "https://github.com/nagasrinath"
 [[extra.links]]
 label = "linkedin"
 url = "https://www.linkedin.com/in/nagasrinath"
+
+[[extra.links]]
+label = "twitter"
+url = "https://x.com/naga_srinath"
 
 [[extra.links]]
 label = "tangled"

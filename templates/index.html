@@ -45,6 +45,7 @@
 {% endif %}
 
 <footer class="footer">
-  <span class="prompt">$</span> {{ config.extra.footer_status }}<span class="caret"></span>
+  <div class="term-output" id="term-output"></div>
+  <span class="prompt">$</span> <input class="typed" id="typed" type="text" value="{{ config.extra.footer_status }}" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="editable status line"><span class="caret"></span>
 </footer>
 {% endblock content %}

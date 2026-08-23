@@ -164,6 +164,28 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 .all-posts { color: var(--base1); font-size: 13px; }
 
 .footer { font-size: 12px; color: var(--base1); }
+.term-output {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.term-output:not(:empty) { margin-bottom: 8px; }
+.term-cmd { color: var(--base00); }
+.term-out { color: var(--base1); white-space: pre-wrap; }
+.typed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  width: 28ch;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  caret-color: var(--green);
+}
 .caret {
   display: inline-block;
   width: 7px;
