@@ -10,7 +10,9 @@ Zola site.
 
 `.github/workflows/deploy.yml` builds/pushes to GHCR on push to `main`,
 then deploys `compose.yaml` over SSH. Secrets and VPS setup are documented
-in the workflow file's header comment.
+in the workflow file's header comment. Two images are built: the site
+itself, and `now-playing/` (a separate Go service backing the "now
+playing" line — see `now-playing/README.md`).
 
 ## Posts
 

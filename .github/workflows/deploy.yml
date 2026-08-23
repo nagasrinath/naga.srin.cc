@@ -1,21 +1,30 @@
-# Builds naga.srin.cc (a static Zola site, see Dockerfile) in CI, pushes
-# it to GHCR as a tiny nginx image, then deploys compose.yaml to a
-# VPS over SSH. The VPS never builds anything — it only pulls the image
-# CI just pushed. There's no runtime config: the site has no server-side
-# secrets, so there's no .env to generate.
+# Builds naga.srin.cc (a static Zola site, see Dockerfile) and the
+# now-playing API (see now-playing/Dockerfile) in CI, pushes both to
+# GHCR, then deploys compose.yaml to a VPS over SSH. The VPS never
+# builds anything — it only pulls the images CI just pushed. A .env
+# (holding the now-playing service's Spotify credentials) is generated
+# on the VPS from GitHub secrets on every deploy; the static site
+# itself still has no server-side secrets of its own.
 #
 # Required secrets, scoped to the "prod" GitHub Environment (Settings →
 # Environments → prod → Environment secrets — NOT repo-level secrets;
 # the `deploy` job below opts into that environment so it can read them):
-#   VPS_HOST     - VPS IP/hostname
-#   VPS_USER     - SSH user to deploy as
-#   VPS_SSH_KEY  - private half of a dedicated deploy keypair (public half
-#                  goes in that user's ~/.ssh/authorized_keys on the VPS)
-#   GHCR_PAT     - classic PAT with `read:packages` scope, so the VPS can
-#                  pull the image from GHCR. Required because the package
-#                  is private; if it's ever made public, this secret and
-#                  the docker-login step in the deploy script can be
-#                  dropped.
+#   VPS_HOST                - VPS IP/hostname
+#   VPS_USER                - SSH user to deploy as
+#   VPS_SSH_KEY              - private half of a dedicated deploy keypair
+#                              (public half goes in that user's
+#                              ~/.ssh/authorized_keys on the VPS)
+#   GHCR_PAT                 - classic PAT with `read:packages` scope, so
+#                              the VPS can pull images from GHCR. Required
+#                              because the package is private; if it's
+#                              ever made public, this secret and the
+#                              docker-login step in the deploy script can
+#                              be dropped.
+#   SPOTIFY_CLIENT_ID        - now-playing service: Spotify app client id
+#   SPOTIFY_CLIENT_SECRET    - now-playing service: Spotify app client secret
+#   SPOTIFY_REFRESH_TOKEN    - now-playing service: refresh token from the
+#                              one-time OAuth authorization (see
+#                              now-playing/README.md for how to obtain it)
 #
 # Variables (not secrets — Settings → Environments → prod → Variables,
 # or repo-level variables under Settings → Secrets and variables → Actions):
@@ -29,6 +38,8 @@
 #   # create it once with `docker network create proxy` if the reverse
 #   # proxy didn't already set it up, then point the reverse proxy at this
 #   # container (service "web", port 80)
+#   # for now-playing: point DNS for api.srin.cc at this VPS, then point
+#   # the reverse proxy at the "now-playing" container, port 8080
 
 name: Deploy prod
 
@@ -68,6 +79,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./now-playing
+          push: true
+          tags: |
+            ghcr.io/nagasrinath/now-playing:${{ github.sha }}
+            ghcr.io/nagasrinath/now-playing:latest
+          cache-from: type=gha,scope=now-playing
+          cache-to: type=gha,mode=max,scope=now-playing
+
   deploy:
     needs: build-and-push
     if: github.ref == 'refs/heads/main'
@@ -93,6 +114,13 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR || '/opt/naga-site' }}"
+            cat > .env <<'EOF'
+            SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }}
+            SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }}
+            SPOTIFY_REFRESH_TOKEN=${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+            ALLOWED_ORIGIN=https://naga.srin.cc
+            EOF
+            chmod 600 .env
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker compose -f compose.yaml pull
             docker compose -f compose.yaml up -d
