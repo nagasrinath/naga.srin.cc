@@ -23,6 +23,7 @@ type nowPlayingResponse struct {
 	Playing bool   `json:"playing"`
 	Track   string `json:"track,omitempty"`
 	Artist  string `json:"artist,omitempty"`
+	URL     string `json:"url,omitempty"`
 }
 
 type tokenCache struct {
@@ -152,6 +153,9 @@ func (s *service) fetchNowPlaying() nowPlayingResponse {
 			Artists []struct {
 				Name string `json:"name"`
 			} `json:"artists"`
+			ExternalURLs struct {
+				Spotify string `json:"spotify"`
+			} `json:"external_urls"`
 		} `json:"item"`
 	}
 	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
@@ -172,6 +176,7 @@ func (s *service) fetchNowPlaying() nowPlayingResponse {
 		Playing: true,
 		Track:   payload.Item.Name,
 		Artist:  strings.Join(names, ", "),
+		URL:     payload.Item.ExternalURLs.Spotify,
 	}
 }
 

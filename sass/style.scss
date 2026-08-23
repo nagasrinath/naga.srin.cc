@@ -164,8 +164,23 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 .all-posts { color: var(--base1); font-size: 13px; }
 
 .footer { font-size: 12px; color: var(--base1); }
-.now-playing { font-size: 12px; color: var(--base1); margin: 0; }
-.now-playing:empty { display: none; }
+.now-playing {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--base3);
+  border-top: 1px solid var(--base2);
+}
+.now-playing-inner {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 8px 24px;
+  font-size: 12px;
+  color: var(--base1);
+}
+.now-playing-inner a { color: var(--blue); }
+.now-playing-inner a:hover { color: var(--orange); }
 .term-output {
   max-height: 200px;
   overflow-y: auto;

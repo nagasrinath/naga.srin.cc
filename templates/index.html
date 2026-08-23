@@ -48,5 +48,7 @@
   <div class="term-output" id="term-output"></div>
   <span class="prompt">$</span> <input class="typed" id="typed" type="text" value="{{ config.extra.footer_status }}" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="editable status line"><span class="caret"></span>
 </footer>
-<p class="now-playing" id="now-playing"></p>
+<div class="now-playing" id="now-playing" hidden>
+  <p class="now-playing-inner" id="now-playing-inner"></p>
+</div>
 {% endblock content %}
