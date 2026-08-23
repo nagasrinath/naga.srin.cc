@@ -2,10 +2,7 @@
 
 {% block content %}
 <header class="header">
-  <picture>
-    <source srcset="{{ get_url(path="avatar-dark.png") }}" media="(prefers-color-scheme: dark)">
-    <img class="avatar" src="{{ get_url(path="avatar-light.png") }}" alt="{{ config.extra.avatar_alt }}">
-  </picture>
+  <img class="avatar" src="{{ get_url(path="avatar.png") }}" alt="{{ config.extra.avatar_alt }}">
   <div>
     <p class="name">{{ config.title }}</p>
     {% set dob_ts = config.extra.dob | date(format="%s") | int %}

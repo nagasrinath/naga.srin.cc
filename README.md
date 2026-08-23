@@ -20,6 +20,7 @@ Add `content/blog/<slug>.md` with `title`, `date`, `description`,
 
 ## Palette / uptime
 
-Solarized Light/Dark tokens in `sass/style.scss`, switching automatically
-via `prefers-color-scheme`. Uptime counts from `extra.dob` in
+Light/dark tokens in `sass/style.scss`, derived from `static/avatar.png`'s
+colors, switching automatically via `prefers-color-scheme`. Uptime counts
+from `extra.dob` in
 `config.toml`, recomputed client-side by `static/uptime.js`.

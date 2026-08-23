@@ -1,53 +1,42 @@
 :root {
-  --base3: #fdf6e3;
-  --base2: #eee8d5;
-  --base1: #93a1a1;
-  --base00: #657b83;
-  --base01: #586e75;
-  --blue: #268bd2;
-  --orange: #cb4b16;
-  --green: #859900;
-  --hover: #f7efdd;
-  --code-bg: #eee8d5; /* fixed: syntax colors are baked light-only at build time */
+  --base3: #f4f5fb;
+  --base2: #e3e6f2;
+  --base1: #626784;
+  --base00: #20253c;
+  --base01: #0a0c1a;
+  --blue: #032cef;
+  --orange: #a85d00;
+  --green: #087d5a;
+  --hover: #eaecf6;
+  --code-bg: #2e3440; /* fixed: syntax colors are baked dark-only at build time */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --base3: #002b36;
-    --base2: #073642;
-    --base1: #586e75;
-    --base00: #839496;
-    --base01: #93a1a1;
-    --hover: #0a3947;
+    --base3: #111422;
+    --base2: #1d2135;
+    --base1: #e6e7f0;
+    --base00: #e6e7f0;
+    --base01: #fefefe;
+    --blue: #4564fc;
+    --orange: #f77f00;
+    --green: #12b886;
+    --hover: #242942;
   }
 }
 
 @font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
   font-display: swap;
 }
 
@@ -61,8 +50,8 @@ body {
   margin: 0;
   background: var(--base3);
   color: var(--base00);
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 14px;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -84,15 +73,15 @@ a:hover { color: var(--orange); }
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 18px;
+  padding-top: 4px;
 }
 .avatar {
   width: 56px;
   height: 56px;
-  border-radius: 3px;
+  border-radius: 12px;
   border: 1px solid var(--base2);
-  filter: grayscale(0.15);
   object-fit: cover;
 }
 .name {

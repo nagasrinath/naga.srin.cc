@@ -13,7 +13,7 @@ taxonomies = [
 
 [markdown]
 highlight_code = true
-highlight_theme = "solarized-light"
+highlight_theme = "nord"
 
 [extra]
 author = "naga"
@@ -52,7 +52,7 @@ label = "tangled"
 url = "https://tangled.org/srin.cc"
 
 [[extra.links]]
-label = "naga@srin.cc"
+label = "hi@srin.cc"
 url = "mailto:hi@srin.cc"
 
 [extra.ui]
