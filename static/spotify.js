@@ -14,7 +14,7 @@
       return;
     }
 
-    inner.appendChild(document.createTextNode("now listening: "));
+    inner.appendChild(document.createTextNode("♪ now listening: "));
 
     var label = data.artist ? data.track + " — " + data.artist : data.track;
     if (data.url) {
