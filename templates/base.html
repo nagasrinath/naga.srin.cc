@@ -7,23 +7,23 @@
 <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
 <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock og_title %}">
 <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock og_description %}">
-<meta property="og:image" content="{{ get_url(path="avatar.png") }}">
+<meta property="og:image" content="{{ get_url(path="avatar.png", cachebust=true) }}">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f4f5fb" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111422" media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/svg+xml" href="{{ get_url(path="favicon.svg") }}">
+<link rel="icon" type="image/svg+xml" href="{{ get_url(path="favicon.svg", cachebust=true) }}">
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
-<link rel="stylesheet" href="{{ get_url(path="style.css") }}">
+<link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
 </head>
 <body data-location="{{ config.extra.location }}">
 <div class="column">
 {% block content %}{% endblock content %}
 </div>
 {% block scripts %}
-<script src="{{ get_url(path="caret.js") }}" defer></script>
-<script src="{{ get_url(path="uptime.js") }}" defer></script>
-<script src="{{ get_url(path="typewriter.js") }}" defer></script>
-<script src="{{ get_url(path="terminal.js") }}" defer></script>
+<script src="{{ get_url(path="caret.js", cachebust=true) }}" defer></script>
+<script src="{{ get_url(path="uptime.js", cachebust=true) }}" defer></script>
+<script src="{{ get_url(path="typewriter.js", cachebust=true) }}" defer></script>
+<script src="{{ get_url(path="terminal.js", cachebust=true) }}" defer></script>
 {% endblock scripts %}
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 {% block content %}
 <header class="header">
-  <img class="avatar" src="{{ get_url(path="avatar.png") }}" alt="{{ config.extra.avatar_alt }}">
+  <img class="avatar" src="{{ get_url(path="avatar.png", cachebust=true) }}" alt="{{ config.extra.avatar_alt }}">
   <div>
     <p class="name">{{ config.title }}</p>
     {% set dob_ts = config.extra.dob | date(format="%s") | int %}

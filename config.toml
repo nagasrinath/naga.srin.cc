@@ -52,6 +52,10 @@ label = "twitter"
 url = "https://x.com/naga_srinath"
 
 [[extra.links]]
+label = "instagram"
+url = "https://instagram.com/_nagasrinath"
+
+[[extra.links]]
 label = "tangled"
 url = "https://tangled.org/srin.cc"
 
