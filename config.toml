@@ -26,7 +26,7 @@ avatar_alt = "portrait of naga"
 footer_status = "still here, still self-hosting "
 
 bio = [
-  "i build and break distributed systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
+  "i build and break systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
   "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack. open source or it didn't happen.",
 ]
 
@@ -38,10 +38,6 @@ interests = [
   "ai agents",
   "oss",
 ]
-
-[[extra.links]]
-label = "srin.cc"
-url = "https://srin.cc"
 
 [[extra.links]]
 label = "github"
@@ -56,8 +52,8 @@ label = "tangled"
 url = "https://tangled.org/srin.cc"
 
 [[extra.links]]
-label = "mail"
-url = "mailto:naga@srin.cc"
+label = "naga@srin.cc"
+url = "mailto:hi@srin.cc"
 
 [extra.ui]
 writing_label = "writing"
