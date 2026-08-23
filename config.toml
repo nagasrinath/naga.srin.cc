@@ -1,6 +1,6 @@
 base_url = "https://naga.srin.cc"
 title = "naga"
-description = "i build and break distributed systems, then run them on hardware i can hear."
+description = "i build and break systems, then run them on hardware i can hear."
 default_language = "en"
 compile_sass = true
 build_search_index = false
