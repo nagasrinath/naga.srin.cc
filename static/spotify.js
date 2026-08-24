@@ -10,7 +10,7 @@
     inner.textContent = "";
 
     if (!data || !data.playing || !data.track) {
-      bar.hidden = true;
+      inner.appendChild(document.createTextNode("♪ no signal"));
       return;
     }
 
@@ -27,8 +27,6 @@
     } else {
       inner.appendChild(document.createTextNode(label));
     }
-
-    bar.hidden = false;
   }
 
   function refresh() {
