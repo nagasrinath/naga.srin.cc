@@ -39,6 +39,20 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Geist Sans";
+  src: url("/fonts/GeistSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Sans";
+  src: url("/fonts/GeistSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 * { box-sizing: border-box; }
 
@@ -98,7 +112,11 @@ a:hover { color: var(--orange); }
 }
 
 .bio { display: flex; flex-direction: column; gap: 16px; }
-.bio p { margin: 0; text-wrap: pretty; }
+.bio p {
+  margin: 0;
+  text-wrap: pretty;
+  font-family: "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
 .bio p.muted { color: var(--base1); }
 .bio p:first-child { color: var(--base00); }
 
@@ -160,6 +178,7 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   color: var(--base1);
   font-size: 12.5px;
   margin-top: 2px;
+  font-family: "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 .all-posts { color: var(--base1); font-size: 13px; }
 
@@ -222,7 +241,11 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   font-weight: 700;
   margin: 6px 0 0;
 }
-.prose { color: var(--base00); text-wrap: pretty; }
+.prose {
+  color: var(--base00);
+  text-wrap: pretty;
+  font-family: "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
 .prose :first-child { margin-top: 0; }
 .prose h2, .prose h3 {
   color: var(--base01);
@@ -236,6 +259,7 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   background: var(--base2);
   padding: 1px 4px;
   border-radius: 2px;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .prose pre {
   background: var(--code-bg);
@@ -243,6 +267,7 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   border-radius: 3px;
   overflow-x: auto;
   font-size: 12.5px;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .prose pre code { background: none; padding: 0; }
 .prose blockquote {
