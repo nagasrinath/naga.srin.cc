@@ -204,6 +204,22 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 .now-playing-label { color: var(--base1); }
 .now-playing-inner a { color: var(--blue); }
 .now-playing-inner a:hover { color: var(--orange); }
+.now-playing-skeleton {
+  display: inline-block;
+  width: 160px;
+  height: 10px;
+  background: var(--base2);
+  border-radius: 2px;
+  vertical-align: middle;
+  animation: skeleton-pulse 1.3s ease-in-out infinite;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-playing-skeleton { animation: none; opacity: 0.6; }
+}
 .term-output {
   max-height: 200px;
   overflow-y: auto;
