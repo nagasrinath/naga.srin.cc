@@ -6,26 +6,33 @@
   var ENDPOINT = "https://api.srin.cc/now-playing";
   var POLL_MS = 30000;
 
+  function label(text) {
+    var span = document.createElement("span");
+    span.className = "now-playing-label";
+    span.textContent = text;
+    return span;
+  }
+
   function render(data) {
     inner.textContent = "";
 
     if (!data || !data.playing || !data.track) {
-      inner.appendChild(document.createTextNode("♪ no signal"));
+      inner.appendChild(label("♪ no signal"));
       return;
     }
 
-    inner.appendChild(document.createTextNode("♪ now listening: "));
+    inner.appendChild(label("♪ now listening: "));
 
-    var label = data.artist ? data.track + " — " + data.artist : data.track;
+    var text = data.artist ? data.track + " — " + data.artist : data.track;
     if (data.url) {
       var link = document.createElement("a");
       link.href = data.url;
       link.target = "_blank";
       link.rel = "noopener";
-      link.textContent = label;
+      link.textContent = text;
       inner.appendChild(link);
     } else {
-      inner.appendChild(document.createTextNode(label));
+      inner.appendChild(document.createTextNode(text));
     }
   }
 
