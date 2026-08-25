@@ -1,13 +1,13 @@
 services:
   naga-site:
     container_name: naga-site
-    image: ghcr.io/nagasrinath/naga-site:latest
+    image: ${SITE_IMAGE}
     restart: unless-stopped
     networks: [proxy]
 
   now-playing:
     container_name: now-playing
-    image: ghcr.io/nagasrinath/now-playing:latest
+    image: ${NOW_PLAYING_IMAGE}
     restart: unless-stopped
     env_file: .env
     networks: [proxy]

@@ -2,9 +2,19 @@
 # now-playing API (see now-playing/Dockerfile) in CI, pushes both to
 # GHCR, then deploys compose.yaml to a VPS over SSH. The VPS never
 # builds anything — it only pulls the images CI just pushed. A .env
-# (holding the now-playing service's Spotify credentials) is generated
-# on the VPS from GitHub secrets on every deploy; the static site
-# itself still has no server-side secrets of its own.
+# (holding the now-playing service's Spotify credentials, plus the
+# exact image digests to run — see below) is generated on the VPS
+# from GitHub secrets/outputs on every deploy; the static site itself
+# still has no server-side secrets of its own.
+#
+# compose.yaml pins images by digest (${SITE_IMAGE}/${NOW_PLAYING_IMAGE},
+# resolved from this workflow's build-and-push outputs), not by the
+# :latest tag, so prod always runs an exact, reproducible artifact.
+# Base images in both Dockerfiles are pinned by digest too, so
+# rebuilding an old commit reproduces the same image content. To roll
+# back, revert or check out the old commit and re-run this workflow
+# (push to main, or workflow_dispatch) — it rebuilds and redeploys
+# that commit's exact original artifact.
 #
 # Required secrets, scoped to the "prod" GitHub Environment (Settings →
 # Environments → prod → Environment secrets — NOT repo-level secrets;
@@ -58,6 +68,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      site-digest: ${{ steps.build-site.outputs.digest }}
+      now-playing-digest: ${{ steps.build-now-playing.outputs.digest }}
     steps:
       - uses: actions/checkout@v7
 
@@ -69,7 +82,8 @@ jobs:
 
       - uses: docker/setup-buildx-action@v4
 
-      - uses: docker/build-push-action@v7
+      - id: build-site
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
@@ -79,7 +93,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - uses: docker/build-push-action@v7
+      - id: build-now-playing
+        uses: docker/build-push-action@v7
         with:
           context: ./now-playing
           push: true
@@ -119,6 +134,8 @@ jobs:
             SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }}
             SPOTIFY_REFRESH_TOKEN=${{ secrets.SPOTIFY_REFRESH_TOKEN }}
             ALLOWED_ORIGIN=https://naga.srin.cc
+            SITE_IMAGE=ghcr.io/nagasrinath/naga-site@${{ needs.build-and-push.outputs.site-digest }}
+            NOW_PLAYING_IMAGE=ghcr.io/nagasrinath/now-playing@${{ needs.build-and-push.outputs.now-playing-digest }}
             EOF
             chmod 600 .env
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
