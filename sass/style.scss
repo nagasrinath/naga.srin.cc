@@ -197,6 +197,9 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   padding: 8px 24px;
   font-size: 12px;
   color: var(--base1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .now-playing-inner a { color: var(--blue); }
 .now-playing-inner a:hover { color: var(--orange); }
