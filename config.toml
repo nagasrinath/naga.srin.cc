@@ -43,9 +43,9 @@ interests = [
 label = "github"
 url = "https://github.com/nagasrinath"
 
-[[extra.links]]
-label = "instagram"
-url = "https://instagram.com/_nagasrinath"
+# [[extra.links]]
+# label = "instagram"
+# url = "https://instagram.com/_nagasrinath"
 
 [[extra.links]]
 label = "tangled"
