@@ -27,7 +27,7 @@ footer_status = "still here, still self-hosting "
 
 bio = [
   "i build and break systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
-  "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack. open source or it didn't happen.",
+  "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack.",
 ]
 
 interests = [
