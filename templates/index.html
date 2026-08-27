@@ -5,9 +5,10 @@
   <img class="avatar" src="{{ get_url(path="avatar.png", cachebust=true) }}" alt="{{ config.extra.avatar_alt }}">
   <div>
     <p class="name">{{ config.title }}</p>
-    {% set dob_ts = config.extra.dob | date(format="%s") | int %}
+    {% set dob_str = config.extra.dob ~ "-01" %}
+    {% set dob_ts = dob_str | date(format="%s") | int %}
     {% set uptime_days = ((now(timestamp=true) - dob_ts) / 86400) | int %}
-    <p class="tagline">{{ config.extra.location }} &middot; <span class="prompt">$</span> uptime <span id="uptime" data-dob="{{ dob_ts }}">{{ uptime_days }}d</span></p>
+    <p class="tagline">{{ config.extra.location }} &middot; <span class="prompt">$</span> uptime <span id="uptime" data-dob="{{ dob_ts }}">~{{ uptime_days }}d</span></p>
   </div>
 </header>
 
