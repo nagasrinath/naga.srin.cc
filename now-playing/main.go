@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	spotifyTokenURL = "https://accounts.spotify.com/api/token"
-	spotifyNowURL   = "https://api.spotify.com/v1/me/player/currently-playing"
-	nowPlayingTTL   = 20 * time.Second
+	spotifyTokenURL  = "https://accounts.spotify.com/api/token"
+	spotifyNowURL    = "https://api.spotify.com/v1/me/player/currently-playing"
+	spotifyRecentURL = "https://api.spotify.com/v1/me/player/recently-played?limit=1"
+	nowPlayingTTL    = 20 * time.Second
 )
 
 type nowPlayingResponse struct {
@@ -24,6 +25,29 @@ type nowPlayingResponse struct {
 	Track   string `json:"track,omitempty"`
 	Artist  string `json:"artist,omitempty"`
 	URL     string `json:"url,omitempty"`
+}
+
+type spotifyTrack struct {
+	Name    string `json:"name"`
+	Artists []struct {
+		Name string `json:"name"`
+	} `json:"artists"`
+	ExternalURLs struct {
+		Spotify string `json:"spotify"`
+	} `json:"external_urls"`
+}
+
+func (t spotifyTrack) response(playing bool) nowPlayingResponse {
+	names := make([]string, 0, len(t.Artists))
+	for _, a := range t.Artists {
+		names = append(names, a.Name)
+	}
+	return nowPlayingResponse{
+		Playing: playing,
+		Track:   t.Name,
+		Artist:  strings.Join(names, ", "),
+		URL:     t.ExternalURLs.Spotify,
+	}
 }
 
 type tokenCache struct {
@@ -115,69 +139,99 @@ func (s *service) getNowPlaying() nowPlayingResponse {
 }
 
 func (s *service) fetchNowPlaying() nowPlayingResponse {
-	fallback := nowPlayingResponse{Playing: false}
-
 	token, err := s.accessToken()
 	if err != nil {
 		log.Printf("access token error: %v", err)
-		return fallback
+		return s.lastPlayed()
 	}
 
 	req, err := http.NewRequest(http.MethodGet, spotifyNowURL, nil)
 	if err != nil {
 		log.Printf("build request error: %v", err)
-		return fallback
+		return s.lastPlayed()
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	res, err := s.httpClient.Do(req)
 	if err != nil {
 		log.Printf("spotify request error: %v", err)
-		return fallback
+		return s.lastPlayed()
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode == http.StatusNoContent {
-		return fallback
+		return s.lastPlayed()
 	}
 	if res.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(res.Body)
 		log.Printf("spotify unexpected status %d: %s", res.StatusCode, body)
-		return fallback
+		return s.lastPlayed()
 	}
 
 	var payload struct {
-		IsPlaying bool `json:"is_playing"`
-		Item      *struct {
-			Name    string `json:"name"`
-			Artists []struct {
-				Name string `json:"name"`
-			} `json:"artists"`
-			ExternalURLs struct {
-				Spotify string `json:"spotify"`
-			} `json:"external_urls"`
-		} `json:"item"`
+		IsPlaying bool          `json:"is_playing"`
+		Item      *spotifyTrack `json:"item"`
 	}
 	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
 		log.Printf("decode error: %v", err)
-		return fallback
+		return s.lastPlayed()
 	}
 
 	if !payload.IsPlaying || payload.Item == nil {
-		return fallback
+		return s.lastPlayed()
 	}
 
-	names := make([]string, 0, len(payload.Item.Artists))
-	for _, a := range payload.Item.Artists {
-		names = append(names, a.Name)
+	return payload.Item.response(true)
+}
+
+// lastPlayed covers the "nothing currently playing" case by falling back to
+// Spotify's play history, so the caller can show "was listening: X" instead
+// of a bare no-signal state. Requires the user-read-recently-played scope;
+// if the refresh token predates that scope, this just fails closed to
+// nowPlayingResponse{Playing: false}, same as before this existed.
+func (s *service) lastPlayed() nowPlayingResponse {
+	none := nowPlayingResponse{Playing: false}
+
+	token, err := s.accessToken()
+	if err != nil {
+		log.Printf("access token error (recently-played): %v", err)
+		return none
 	}
 
-	return nowPlayingResponse{
-		Playing: true,
-		Track:   payload.Item.Name,
-		Artist:  strings.Join(names, ", "),
-		URL:     payload.Item.ExternalURLs.Spotify,
+	req, err := http.NewRequest(http.MethodGet, spotifyRecentURL, nil)
+	if err != nil {
+		log.Printf("build recently-played request error: %v", err)
+		return none
 	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	res, err := s.httpClient.Do(req)
+	if err != nil {
+		log.Printf("spotify recently-played request error: %v", err)
+		return none
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(res.Body)
+		log.Printf("spotify recently-played unexpected status %d: %s", res.StatusCode, body)
+		return none
+	}
+
+	var payload struct {
+		Items []struct {
+			Track spotifyTrack `json:"track"`
+		} `json:"items"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
+		log.Printf("recently-played decode error: %v", err)
+		return none
+	}
+	if len(payload.Items) == 0 {
+		return none
+	}
+
+	return payload.Items[0].Track.response(false)
 }
 
 func (s *service) accessToken() (string, error) {

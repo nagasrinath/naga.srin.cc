@@ -16,12 +16,12 @@
   function render(data) {
     inner.textContent = "";
 
-    if (!data || !data.playing || !data.track) {
+    if (!data || !data.track) {
       inner.appendChild(label("♪ no signal"));
       return;
     }
 
-    inner.appendChild(label("♪ now listening: "));
+    inner.appendChild(label(data.playing ? "♪ now listening: " : "♪ was listening: "));
 
     var text = data.artist ? data.track + " — " + data.artist : data.track;
     if (data.url) {

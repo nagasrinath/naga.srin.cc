@@ -3,7 +3,11 @@
 Small Go service backing the "now playing" line on naga.srin.cc.
 Polls the site owner's Spotify account and exposes one endpoint:
 
-`GET /now-playing` → `{"playing":true,"track":"...","artist":"..."}` or `{"playing":false}`.
+`GET /now-playing` → `{"playing":true,"track":"...","artist":"..."}` when
+something's currently playing; otherwise falls back to Spotify's play
+history, returning `{"playing":false,"track":"...","artist":"..."}` for
+the last-played track, or bare `{"playing":false}` if even that's
+unavailable.
 
 - `go build .` / `go run .` — needs `SPOTIFY_CLIENT_ID`,
   `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN` set; `ALLOWED_ORIGIN`
@@ -24,11 +28,12 @@ one-time VPS/DNS setup (routing `api.srin.cc` to this container).
    running anything — you're just reading the `code` param back out of
    the browser's address bar after Spotify redirects there).
 2. Note the app's **Client ID** and **Client Secret**.
-3. Open this in a browser, filling in your client ID
-   (`user-read-currently-playing` is the only scope needed):
+3. Open this in a browser, filling in your client ID (needs both
+   `user-read-currently-playing` and `user-read-recently-played`, the
+   latter for the "was listening" fallback when nothing's playing):
 
    ```
-   https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://127.0.0.1:8888/callback&scope=user-read-currently-playing
+   https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://127.0.0.1:8888/callback&scope=user-read-currently-playing%20user-read-recently-played
    ```
 
    Log in, approve, and the browser will try to load
