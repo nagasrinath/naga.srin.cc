@@ -19,7 +19,7 @@ highlight_theme = "nord"
 author = "naga"
 blog_enabled = false
 # reference date the footer "uptime" counter counts up from
-dob = "2005-05-24"
+dob = "2005-04-12"
 
 location = "blr"
 avatar_alt = "portrait of naga"
