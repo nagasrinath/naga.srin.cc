@@ -7,7 +7,7 @@
 <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
 <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock og_title %}">
 <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock og_description %}">
-<meta property="og:image" content="{{ get_url(path="avatar.png", cachebust=true) }}">
+<meta property="og:image" content="{{ config.extra.avatar_url }}">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f4f5fb" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111422" media="(prefers-color-scheme: dark)">

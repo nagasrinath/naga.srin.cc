@@ -22,6 +22,7 @@ blog_enabled = false
 dob = "2005-05"
 
 location = "blr"
+avatar_url = "https://cdn.srin.cc/photos/naga-avatar.png"
 avatar_alt = "portrait of naga"
 footer_status = "still here, still self-hosting "
 
