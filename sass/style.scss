@@ -204,6 +204,7 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 .now-playing-label { color: var(--base1); }
 .now-playing-inner a { color: var(--blue); }
 .now-playing-inner a:hover { color: var(--orange); }
+.now-playing-inner:has(a:hover) { color: var(--orange); }
 .now-playing-skeleton {
   display: inline-block;
   width: 160px;
