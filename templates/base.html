@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ config.default_language }}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,18 +13,18 @@
 <meta name="theme-color" content="#111422" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="{{ get_url(path="favicon.svg", cachebust=true) }}">
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
+{# No cachebust: these URLs must match sass/style.scss's url("/fonts/...")
+   exactly, or the browser fetches each font twice. #}
+<link rel="preload" href="{{ get_url(path="fonts/GeistMono-Regular.woff2") }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ get_url(path="fonts/GeistSans-Regular.woff2") }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
 </head>
 <body data-location="{{ config.extra.location }}">
 <div class="column">
 {% block content %}{% endblock content %}
 </div>
-{% block scripts %}
-<script src="{{ get_url(path="caret.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="uptime.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="typewriter.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="terminal.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="spotify.js", cachebust=true) }}" defer></script>
-{% endblock scripts %}
+{# Every script this site has targets index-only elements, so they're
+   declared in index.html. Other pages ship no JS. #}
+{% block scripts %}{% endblock scripts %}
 </body>
 </html>

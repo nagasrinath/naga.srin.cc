@@ -1,7 +1,59 @@
+// The footer prompt: a typewriter intro, a blinking caret, and a small
+// command REPL. All three drive the same #typed input, so they share one
+// scope rather than racing each other from separate files.
 (function () {
   var el = document.getElementById("typed");
   var out = document.getElementById("term-output");
-  if (!el || !out) return;
+  var caret = document.querySelector(".caret");
+  if (!el) return;
+
+  // --- typewriter intro ---------------------------------------------------
+
+  var STEP_MS = 45;
+  var text = el.value;
+  el.style.width = "0ch";
+  var i = 0;
+  var timer = setInterval(function () {
+    i++;
+    el.style.width = i + "ch";
+    if (i >= text.length) clearInterval(timer);
+  }, STEP_MS);
+
+  // --- caret --------------------------------------------------------------
+  // Blinking is a CSS animation (.caret.blink) so it respects
+  // prefers-reduced-motion; we only park it while the field has focus, where
+  // the native text cursor takes over.
+
+  if (caret) {
+    caret.classList.add("blink");
+    el.addEventListener("focus", function () { caret.classList.remove("blink"); });
+    el.addEventListener("blur", function () { caret.classList.add("blink"); });
+  }
+
+  // --- typing anywhere focuses the prompt ---------------------------------
+
+  document.addEventListener("keydown", function (e) {
+    var active = document.activeElement;
+    if (active === el) return;
+    if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable)) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      el.value = el.value.slice(0, -1);
+    } else if (e.key.length === 1) {
+      e.preventDefault();
+      el.value += e.key;
+    } else {
+      return;
+    }
+    el.focus();
+    el.setSelectionRange(el.value.length, el.value.length);
+  });
+
+  // --- command REPL -------------------------------------------------------
+
+  if (!out) return;
 
   var history = [];
   var historyIndex = 0;
@@ -22,7 +74,7 @@
       },
     },
     whoami: { desc: "who you're talking to", run: function () { return "naga"; } },
-    pwd: { desc: "current directory", run: function () { return "/world/india/banglore/naga"; } },
+    pwd: { desc: "current directory", run: function () { return "/world/india/bangalore/naga"; } },
     ls: {
       desc: "list files",
       run: function () { return "bio.txt  interests.txt  links.txt"; },
@@ -55,7 +107,7 @@
         return [
           "naga@srin.cc",
           "-------------",
-          "OS: Nix OS",
+          "OS: NixOS",
           "Uptime: " + (uptimeEl ? uptimeEl.textContent : "?"),
           "Location: " + location,
           "Interests: " + interests,
