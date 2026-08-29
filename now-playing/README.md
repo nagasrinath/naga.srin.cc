@@ -1,7 +1,7 @@
 # now-playing
 
 Small Go service backing the "now playing" line on naga.srin.cc.
-Polls the site owner's Spotify account and exposes one endpoint:
+Polls the site owner's Spotify account and exposes two endpoints:
 
 `GET /now-playing` → `{"playing":true,"track":"...","artist":"..."}` when
 something's currently playing; otherwise falls back to Spotify's play
@@ -9,10 +9,28 @@ history, returning `{"playing":false,"track":"...","artist":"..."}` for
 the last-played track, or bare `{"playing":false}` if even that's
 unavailable.
 
+`GET /healthz` → `ok`.
+
 - `go build .` / `go run .` — needs `SPOTIFY_CLIENT_ID`,
   `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN` set; `ALLOWED_ORIGIN`
   and `PORT` are optional (default to `https://naga.srin.cc` and `8080`).
+- `go test -race ./...` — no external calls; `httptest` stands in for
+  Spotify. Keep it dependency-free, `go.mod` has no requires.
 - `docker build -t now-playing:test .` — same env vars via `-e`/`--env-file`.
+
+## Caching
+
+Responses are cached for `nowPlayingTTL` (20s). On a miss, exactly one
+goroutine talks to Spotify while the rest wait on `fetchMu` and read what
+it stored — otherwise every request arriving after the TTL expired would
+issue its own call.
+
+The cache distinguishes *"Spotify says nothing is playing"* (a real
+answer, cached) from *"the call failed"* (the previous value is kept, so
+a blip doesn't visibly drop the site to "no signal"). A failed attempt
+still bumps the TTL timestamp, so an outage can't turn every request into
+a fresh upstream attempt. Only a failure with nothing ever cached
+degrades to `{"playing":false}`.
 
 Deployed as a second service in the repo root's `compose.yaml`, built
 and pushed to GHCR by `.github/workflows/deploy.yml` alongside the main
