@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
+{% block column_class %}column--home{% endblock column_class %}
+
 {% block content %}
+<div class="home-grid">
+<div class="home-hero">
 <header class="header">
   <img class="avatar" src="{{ config.extra.avatar_url }}" alt="{{ config.extra.avatar_alt }}">
   <div>
@@ -28,7 +32,9 @@
   <a href="{{ link.url }}">{{ link.label }}</a>
   {% endfor %}
 </nav>
+</div>
 
+<div class="home-side">
 {% if config.extra.blog_enabled %}
 {% set blog = get_section(path="blog/_index.md") %}
 <main class="writing">
@@ -49,6 +55,9 @@
   <div class="term-output" id="term-output"></div>
   <span class="prompt">$</span> <input class="typed" id="typed" type="text" value="{{ config.extra.footer_status }}" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="editable status line"><span class="caret"></span>
 </footer>
+</div>
+</div>
+
 <div class="now-playing" id="now-playing">
   <p class="now-playing-inner" id="now-playing-inner"><span class="now-playing-label">♪</span> <span class="now-playing-skeleton" aria-hidden="true"></span></p>
 </div>

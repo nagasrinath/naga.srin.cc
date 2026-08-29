@@ -12,8 +12,15 @@
 
 <main>
   <article>
-    <p class="post-meta">{{ page.date | date(format="%Y-%m-%d") }}</p>
-    <h1 class="post-title-main">{{ page.title }}</h1>
+    <header class="post-header">
+      <p class="post-meta">
+        <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
+        {% for tag in page.taxonomies.tags | default(value=[]) %}
+        <a class="tag" href="{{ get_taxonomy_url(kind="tags", name=tag) }}">{{ tag }}</a>
+        {% endfor %}
+      </p>
+      <h1 class="post-title-main">{{ page.title }}</h1>
+    </header>
     <div class="prose">
       {{ page.content | safe }}
     </div>

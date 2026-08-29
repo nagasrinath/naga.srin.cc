@@ -12,12 +12,15 @@ taxonomies = [
 ]
 
 [markdown]
-highlight_code = true
-highlight_theme = "nord"
+insert_anchor_links = "right"
+
+[markdown.highlighting]
+enabled = true
+theme = "nord"
 
 [extra]
 author = "naga"
-blog_enabled = false
+blog_enabled = true
 # reference date the footer "uptime" counter counts up from
 dob = "2005-05"
 
