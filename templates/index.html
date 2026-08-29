@@ -46,10 +46,18 @@
 {% endif %}
 
 <footer class="footer">
-  <div class="term-output" id="term-output"></div>
+  <div class="term-output" id="term-output" role="log" aria-live="polite"></div>
   <span class="prompt">$</span> <input class="typed" id="typed" type="text" value="{{ config.extra.footer_status }}" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="editable status line"><span class="caret"></span>
 </footer>
 <div class="now-playing" id="now-playing">
-  <p class="now-playing-inner" id="now-playing-inner"><span class="now-playing-label">♪</span> <span class="now-playing-skeleton" aria-hidden="true"></span></p>
+  {# The skeleton is JS's placeholder; without JS it would pulse forever, so
+     render a resolved state instead. #}
+  <p class="now-playing-inner" id="now-playing-inner" aria-live="polite"><span class="now-playing-label">♪ no signal</span></p>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{{ get_url(path="uptime.js", cachebust=true) }}" defer></script>
+<script src="{{ get_url(path="term.js", cachebust=true) }}" defer></script>
+<script src="{{ get_url(path="spotify.js", cachebust=true) }}" defer></script>
+{% endblock scripts %}

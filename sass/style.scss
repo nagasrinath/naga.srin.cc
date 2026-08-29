@@ -253,6 +253,9 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 }
 .caret.blink { animation: blink 1120ms steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .caret.blink { animation: none; }
+}
 
 .back-link { color: var(--blue); font-size: 13px; }
 .post-meta { color: var(--base1); font-size: 12px; margin: 20px 0 0; }

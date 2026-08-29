@@ -44,3 +44,11 @@ Light/dark tokens in `sass/style.scss`, derived from the avatar's colors,
 switching automatically via `prefers-color-scheme`. The avatar itself is
 served from `extra.avatar_url`, not the repo. Uptime counts from
 `extra.dob` in `config.toml`, recomputed client-side by `static/uptime.js`.
+
+## Client-side JS
+
+All of it is index-only and loaded from `templates/index.html`'s
+`{% block scripts %}` — blog, tag, and 404 pages ship none.
+`static/term.js` owns the footer prompt (`#typed`): the typewriter intro,
+the caret, and the command REPL all touch that one element, so they live
+together. `static/uptime.js` and `static/spotify.js` are independent.
