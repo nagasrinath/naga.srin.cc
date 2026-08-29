@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
 </head>
 <body data-location="{{ config.extra.location }}">
-<div class="column">
+<div class="column {% block column_class %}{% endblock column_class %}">
 {% block content %}{% endblock content %}
 </div>
 {% block scripts %}

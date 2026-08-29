@@ -12,8 +12,11 @@ taxonomies = [
 ]
 
 [markdown]
-highlight_code = true
-highlight_theme = "nord"
+insert_anchor_links = "right"
+
+[markdown.highlighting]
+enabled = true
+theme = "nord"
 
 [extra]
 author = "naga"
