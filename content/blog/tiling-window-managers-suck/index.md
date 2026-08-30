@@ -77,37 +77,7 @@ i configure these shortcuts with [TinyCast](https://github.com/abue-ammar/tinyca
 
 for the terminal, i use Ghostty's built in splits. that gives me the tiling features i want without tiling the whole desktop.
 
-i use Vim-like keybindings for navigation:
-
-| keybind | action |
-| --- | --- |
-| `Ctrl + H` | go to left split |
-| `Ctrl + J` | go to bottom split |
-| `Ctrl + K` | go to top split |
-| `Ctrl + L` | go to right split |
-
-For creating splits:
-
-| keybind | action |
-| --- | --- |
-| `Ctrl + A` then `H` | new split left |
-| `Ctrl + A` then `J` | new split down |
-| `Ctrl + A` then `K` | new split up |
-| `Ctrl + A` then `L` | new split right |
-
-i also have:
-
-| keybind | action |
-| --- | --- |
-| `Ctrl + A` then `F` | toggle split zoom |
-| `Ctrl + A` then `N` | next tab |
-| `Ctrl + A` then `P` | previous tab |
-
-And:
-
-| keybind | action |
-| --- | --- |
-| `Ctrl + N` | new window |
+i use Vim-like keybindings for navigation: [ghostty config](https://raw.githubusercontent.com/nagasrinath/nix-darwin-config/refs/heads/main/home/ghostty/config)
 
 Ghostty gives me:
 
