@@ -24,7 +24,7 @@ blog_enabled = true
 # reference date the footer "uptime" counter counts up from
 dob = "2005-05"
 
-location = "blr"
+location = "📍 hyd"
 avatar_url = "https://cdn.srin.cc/photos/naga-avatar.png"
 avatar_alt = "portrait of naga"
 footer_status = "still here, still self-hosting "
