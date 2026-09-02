@@ -17,6 +17,8 @@ over the years i used:
 - dwm
 - hyprland
 
+![dwm setup](dwm.png)
+
 ## moving to macOS
 
 when i got a MacBook in 2023, i wanted the same setup. i tried `yabai` + `skhd`, then [AeroSpace](https://github.com/nikitabobko/AeroSpace). AeroSpace's virtual workspaces are much faster than macOS spaces, but i eventually realized:
