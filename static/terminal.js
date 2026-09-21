@@ -22,7 +22,7 @@
       },
     },
     whoami: { desc: "who you're talking to", run: function () { return "naga"; } },
-    pwd: { desc: "current directory", run: function () { return "/world/india/banglore/naga"; } },
+    pwd: { desc: "current directory", run: function () { return "/world/india/hyderabad/naga"; } },
     ls: {
       desc: "list files",
       run: function () { return "bio.txt  interests.txt  links.txt"; },
@@ -53,7 +53,7 @@
         var location = document.body.getAttribute("data-location") || "";
         var interests = readList(".tags-row .tag").join(", ");
         return [
-          "naga@srin.cc",
+          "naga@naga.srin.cc",
           "-------------",
           "OS: Nix OS",
           "Uptime: " + (uptimeEl ? uptimeEl.textContent : "?"),
@@ -89,9 +89,9 @@
     },
     uname: {
       desc: "kernel info",
-      run: function () { return "Linux srin.cc 6.1.0-naga #1 SMP PREEMPT x86_64 GNU/Linux"; },
+      run: function () { return "Linux naga.srin.cc 6.1.0-naga #1 SMP PREEMPT x86_64 GNU/Linux"; },
     },
-    hostname: { desc: "this machine's hostname", run: function () { return "srin.cc"; } },
+    hostname: { desc: "this machine's hostname", run: function () { return "naga.srin.cc"; } },
     sudo: {
       desc: "try it",
       run: function () { return "naga is not in the sudoers file.  This incident will be reported."; },
