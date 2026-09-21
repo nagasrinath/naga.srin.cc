@@ -6,10 +6,27 @@
   var ENDPOINT = "https://api.srin.cc/now-playing";
   var POLL_MS = 30000;
 
-  function label(text) {
+  function bars() {
+    var wrap = document.createElement("span");
+    wrap.className = "now-playing-bars";
+    wrap.setAttribute("aria-hidden", "true");
+    for (var i = 0; i < 3; i++) {
+      var b = document.createElement("span");
+      b.className = "bar";
+      wrap.appendChild(b);
+    }
+    return wrap;
+  }
+
+  function label(icon, text) {
     var span = document.createElement("span");
     span.className = "now-playing-label";
-    span.textContent = text;
+    if (icon) {
+      span.appendChild(icon);
+      span.appendChild(document.createTextNode(text));
+    } else {
+      span.textContent = text;
+    }
     return span;
   }
 
@@ -17,11 +34,15 @@
     inner.textContent = "";
 
     if (!data || !data.track) {
-      inner.appendChild(label("♪ no signal"));
+      inner.appendChild(label(null, "♪ no signal"));
       return;
     }
 
-    inner.appendChild(label(data.playing ? "♪ now listening: " : "♪ was listening: "));
+    if (data.playing) {
+      inner.appendChild(label(bars(), " now listening: "));
+    } else {
+      inner.appendChild(label(null, "♪ was listening: "));
+    }
 
     var text = data.artist ? data.track + " — " + data.artist : data.track;
     if (data.url) {

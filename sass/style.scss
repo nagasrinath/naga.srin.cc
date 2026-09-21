@@ -246,6 +246,32 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
 @media (prefers-reduced-motion: reduce) {
   .now-playing-skeleton { animation: none; opacity: 0.6; }
 }
+.now-playing-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
+}
+.now-playing-bars .bar {
+  flex: 0 0 2px;
+  width: 2px;
+  background: var(--base1);
+  border-radius: 1px;
+  transform-origin: bottom;
+  animation: eq-bounce 1s ease-in-out infinite;
+}
+.now-playing-bars .bar:nth-child(1) { height: 40%; animation-delay: -0.9s; }
+.now-playing-bars .bar:nth-child(2) { height: 100%; animation-delay: -0.5s; }
+.now-playing-bars .bar:nth-child(3) { height: 65%; animation-delay: -0.2s; }
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-playing-bars .bar { animation: none; }
+}
 .term-output {
   max-height: 200px;
   overflow-y: auto;
