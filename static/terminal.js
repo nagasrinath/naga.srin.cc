@@ -25,7 +25,7 @@
     pwd: { desc: "current directory", run: function () { return "/world/india/hyderabad/naga"; } },
     ls: {
       desc: "list files",
-      run: function () { return "bio.txt  interests.txt  links.txt"; },
+      run: function () { return "bio.txt  links.txt"; },
     },
     cat: {
       desc: "print a file (try: cat bio.txt)",
@@ -33,9 +33,6 @@
         var file = (args || "").trim();
         if (file === "bio.txt") {
           return readList(".bio p");
-        }
-        if (file === "interests.txt") {
-          return readList(".tags-row .tag").join(", ");
         }
         if (file === "links.txt") {
           return Array.prototype.map.call(document.querySelectorAll("nav.links a"), function (a) {
@@ -51,14 +48,12 @@
       run: function () {
         var uptimeEl = document.getElementById("uptime");
         var location = document.body.getAttribute("data-location") || "";
-        var interests = readList(".tags-row .tag").join(", ");
         return [
           "naga@naga.srin.cc",
           "-------------",
           "OS: Nix OS",
           "Uptime: " + (uptimeEl ? uptimeEl.textContent : "?"),
           "Location: " + location,
-          "Interests: " + interests,
         ];
       },
     },

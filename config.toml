@@ -34,15 +34,6 @@ bio = [
   "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack.",
 ]
 
-interests = [
-  "linux",
-  "distributed systems",
-  "self-hosting",
-  "k8s",
-  "ai agents",
-  "oss",
-]
-
 [[extra.links]]
 label = "github"
 url = "https://github.com/nagasrinath"

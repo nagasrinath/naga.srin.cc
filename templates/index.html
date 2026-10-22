@@ -20,11 +20,6 @@
   {% for para in config.extra.bio %}
   <p{% if not loop.first %} class="muted"{% endif %}>{{ para }}</p>
   {% endfor %}
-  <div class="tags-row">
-    {% for interest in config.extra.interests %}
-    <span class="tag">{{ interest }}</span>
-    {% endfor %}
-  </div>
 </section>
 
 <nav class="links" aria-label="elsewhere">
