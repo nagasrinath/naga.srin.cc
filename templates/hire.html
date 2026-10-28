@@ -125,7 +125,7 @@
       {% for st in x.method.steps %}
       <li>
         <span class="hire-when">0{{ loop.index }} &middot; {{ st.when }}</span>
-        <p><strong>{{ st.title }}.</strong> {{ st.body }}</p>
+        <p><strong>{% if loop.first and x.booking_url %}<a href="{{ x.booking_url }}">{{ st.title }}</a>{% else %}{{ st.title }}{% endif %}.</strong> {{ st.body }}</p>
       </li>
       {% endfor %}
     </ol>
@@ -186,7 +186,7 @@
     <div class="hire-box hire-cta">
       <p><span class="prompt">$</span> <strong>mail</strong> <a href="{{ contact.url }}">{{ contact.label }}</a></p>
       {% if x.booking_url %}
-      <p><span class="prompt">$</span> <strong>open</strong> <a href="{{ x.booking_url }}">booking link</a> <span class="hire-muted"># free 30-min call</span></p>
+      <p><span class="prompt">$</span> <strong>open</strong> <a href="{{ x.booking_url }}">{{ x.booking_url | replace(from="https://", to="") }}</a> <span class="hire-muted"># free 15-min call</span></p>
       {% endif %}
       <p class="hire-muted">replies within a day.</p>
     </div>

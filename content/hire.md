@@ -9,7 +9,7 @@ heading = "proposal: backend engineering, on contract"
 available_from = "december"
 slots = 2
 # leave empty to hide the "$ open" line in the next-step block
-booking_url = ""
+booking_url = "https://cal.com/nagasrinath/quick-chat"
 
 meta = [
   { k = "to", v = "founders & small teams building a real product" },
@@ -64,7 +64,7 @@ decisions = [
 [extra.method]
 lead = "design first. ship in small, reviewed steps."
 steps = [
-  { when = "day 1", title = "intro call", body = "30 minutes, free. you describe the problem; i tell you honestly whether i am the right fit." },
+  { when = "day 1", title = "intro call", body = "15 minutes, free. you describe the problem; i tell you honestly whether i am the right fit." },
   { when = "week 1", title = "design & quote", body = "a short design doc — modules, schema, infra — with a fixed price and milestones you sign off on." },
   { when = "weeks 2+", title = "build", body = "small, reviewed commits in your repo, deployed as they land. async updates, a weekly demo." },
   { when = "last week", title = "handover", body = "docs, runbooks and a recorded walkthrough so your team can own it — or keep me on a retainer." },
