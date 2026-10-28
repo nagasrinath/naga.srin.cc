@@ -165,6 +165,23 @@ a.tag:hover { color: var(--orange); border-color: var(--base2); }
   gap: 4px 20px;
 }
 .links a { text-transform: lowercase; }
+.links { align-items: center; }
+.hire-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 12px;
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  color: var(--green);
+}
+.hire-btn:hover { color: var(--base3); background: var(--green); }
+.hire-btn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
 
 .writing {
   border-top: 1px solid var(--base2);

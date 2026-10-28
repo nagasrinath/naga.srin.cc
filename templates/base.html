@@ -14,6 +14,7 @@
 <link rel="icon" type="image/svg+xml" href="{{ get_url(path="favicon.svg", cachebust=true) }}">
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
 <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
+{% block head %}{% endblock head %}
 </head>
 <body data-location="{{ config.extra.location }}">
 <div class="column {% block column_class %}{% endblock column_class %}">

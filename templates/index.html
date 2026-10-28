@@ -26,6 +26,7 @@
   {% for link in config.extra.links %}
   <a href="{{ link.url }}">{{ link.label }}</a>
   {% endfor %}
+  <a class="hire-btn" href="{{ get_url(path="hire") }}"><span class="hire-btn-dot" aria-hidden="true"></span>hire me</a>
 </nav>
 </div>
 

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} &middot; {{ config.title }}{% endblock title %}
+{% block description %}{{ page.description }}{% endblock description %}
+{% block og_title %}{{ page.extra.heading }} &middot; {{ config.title }}{% endblock og_title %}
+{% block og_description %}{{ page.description }}{% endblock og_description %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ get_url(path="hire.css", cachebust=true) }}">
+{% endblock head %}
+
+{% block column_class %}column--hire{% endblock column_class %}
+
+{% block content %}
+{% set x = page.extra %}
+{% set contact = config.extra.links | filter(attribute="label", value="hi@srin.cc") | first %}
+{% set sections = [
+  "summary",
+  "scope",
+  "prior work — " ~ x.work.name,
+  "method",
+  "engagements & pricing",
+  "fit",
+  "terms & questions",
+  "next step",
+] %}
+
+<header class="hire-top">
+  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.base_url | replace(from="https://", to="") }}</a>
+  <span class="hire-rev">/hire &middot; rev {{ page.updated | date(format="%Y-%m-%d") }}</span>
+</header>
+
+<main class="hire">
+  <section class="hire-cover">
+    <h1 class="hire-label">{{ x.heading }}</h1>
+
+    <dl class="hire-box hire-kv">
+      <dt>from</dt>
+      <dd>{{ config.title | lower }} &lt;<a href="{{ contact.url }}">{{ contact.label }}</a>&gt;</dd>
+      {% for row in x.meta %}
+      <dt>{{ row.k }}</dt><dd>{{ row.v }}</dd>
+      {% endfor %}
+      <dt>status</dt>
+      <dd><span class="hire-dot" aria-hidden="true"></span> accepting work from {{ x.available_from }} &middot; {{ x.slots }} slots</dd>
+    </dl>
+
+    <nav class="hire-toc" aria-label="contents">
+      <p>contents</p>
+      <ol>
+        {% for s in sections %}
+        <li><a href="#{{ s | slugify }}"><span>0{{ loop.index }}</span> {{ s }}</a></li>
+        {% endfor %}
+      </ol>
+    </nav>
+  </section>
+
+  {% for s in sections %}
+  {% set idx = loop.index %}
+  {% set id = s | slugify %}
+  <section class="hire-section" id="{{ id }}" aria-labelledby="{{ id }}-h">
+    <h2 class="hire-label" id="{{ id }}-h"><span class="hire-num">0{{ idx }}</span> {{ s }}</h2>
+
+    {% if idx == 1 %}
+    <p class="hire-strong">{{ x.summary_lead }}</p>
+    <p>{{ x.summary }}</p>
+    <p class="hire-term"><span class="prompt">$</span> naga --stack<br>{{ x.stack }}</p>
+
+    {% elif idx == 2 %}
+    {% for item in x.scope %}
+    <div class="hire-sub">
+      <h3>{{ idx }}.{{ loop.index }} {{ item.title }}</h3>
+      <p>{{ item.body }}</p>
+      <ul class="hire-list">
+        {% for li in item.items %}<li>{{ li }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+
+    {% elif idx == 3 %}
+    {% set w = x.work %}
+    <dl class="hire-kv">
+      {% for row in w.meta %}
+      <dt>{{ row.k }}</dt><dd>{{ row.v }}</dd>
+      {% endfor %}
+      <dt>status</dt><dd class="prompt">{{ w.status }}</dd>
+    </dl>
+    {% for row in w.story %}
+    <p><strong>{{ row.k }}.</strong> {{ row.v }}</p>
+    {% endfor %}
+
+    <figure class="hire-box hire-fig">
+      <figcaption>table 3.1 — size of the build</figcaption>
+      <table>
+        {% for row in w.size %}
+        <tr><th scope="row">{{ row.k }}</th><td>{{ row.v }}</td></tr>
+        {% endfor %}
+      </table>
+    </figure>
+
+    <figure class="hire-box hire-fig">
+      <figcaption>fig 3.2 — {{ w.figure }}</figcaption>
+<pre class="hire-diagram" role="img" aria-label="one srilin-platform docker image (go 1.26) runs as five cloud run services: customer api, admin api, push worker, pull worker and batch jobs, all backed by postgres, cloud tasks, pub/sub and gcs, provisioned by terraform across shared, stage and prod.">
+                 ┌────────────────────────────┐
+                 │ srilin-platform · go 1.26  │
+                 │      one docker image      │
+                 └──────────────┬─────────────┘
+      ┌────────────┬────────────┼────────────┬────────────┐
+      ▼            ▼            ▼            ▼            ▼
+ customer api  admin api   worker·push  worker·pull   batch jobs
+   rest /v1    iap-gated   cloud tasks    pub/sub     scheduler
+      └────────────┴────────────┬────────────┴────────────┘
+                                ▼
+           postgres (ha) · cloud tasks · pub/sub · gcs
+                 terraform: shared / stage / prod</pre>
+    </figure>
+
+    <h3>notable decisions</h3>
+    <ul class="hire-list">
+      {% for li in w.decisions %}<li>{{ li }}</li>{% endfor %}
+    </ul>
+
+    {% elif idx == 4 %}
+    <p>{{ x.method.lead }}</p>
+    <ol class="hire-box hire-steps">
+      {% for st in x.method.steps %}
+      <li>
+        <span class="hire-when">0{{ loop.index }} &middot; {{ st.when }}</span>
+        <p><strong>{{ st.title }}.</strong> {{ st.body }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+
+    {% elif idx == 5 %}
+    <p>{{ x.pricing.lead }}</p>
+    <div class="hire-box hire-plans">
+      {% for plan in x.pricing.plans %}
+      <article class="hire-plan">
+        <h3 class="hire-label">{{ plan.name }}</h3>
+        <dl class="hire-prices">
+          {% for amount in [plan.usd, plan.inr] %}
+          <dt class="hire-sr">{% if loop.first %}outside india{% else %}in india{% endif %}</dt>
+          <dd class="{% if loop.first %}hire-price{% else %}hire-price-alt{% endif %}">{{ amount }}
+            {%- if plan.from %}<span aria-hidden="true">+</span><span class="hire-sr"> or more</span>{% endif %}
+            {%- if plan.per %}<span class="hire-unit"><span aria-hidden="true"> / {{ plan.per | truncate(length=2, end="") }}</span><span class="hire-sr"> per {{ plan.per }}</span></span>{% endif -%}
+          </dd>
+          {% endfor %}
+          <dt class="hire-sr">terms</dt>
+          <dd class="hire-basis">{{ plan.basis }}</dd>
+        </dl>
+        <ul class="hire-list">
+          {% for li in plan.items %}<li>{{ li }}</li>{% endfor %}
+        </ul>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="hire-note">{{ x.pricing.note }}</p>
+
+    {% elif idx == 6 %}
+    <div class="hire-fit">
+      <div>
+        <h3>a good fit if you…</h3>
+        <ul class="hire-list hire-list--plus">
+          {% for li in x.fit.good %}<li>{{ li }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h3>probably not a fit if you…</h3>
+        <ul class="hire-list">
+          {% for li in x.fit.bad %}<li>{{ li }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    {% elif idx == 7 %}
+    <div class="hire-faq">
+      {% for f in x.faqs %}
+      <details>
+        <summary>{{ f.q }}</summary>
+        <p>{{ f.a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+
+    {% elif idx == 8 %}
+    <p>{{ x.next.lead }}</p>
+    <div class="hire-box hire-cta">
+      <p><span class="prompt">$</span> <strong>mail</strong> <a href="{{ contact.url }}">{{ contact.label }}</a></p>
+      {% if x.booking_url %}
+      <p><span class="prompt">$</span> <strong>open</strong> <a href="{{ x.booking_url }}">booking link</a> <span class="hire-muted"># free 30-min call</span></p>
+      {% endif %}
+      <p class="hire-muted">replies within a day.</p>
+    </div>
+    <p class="hire-strong">— naga</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+</main>
+
+<footer class="footer hire-footer">
+  <span><span class="prompt">$</span> {{ config.extra.footer_status | trim }} <span class="caret"></span></span>
+  <nav aria-label="elsewhere">
+    {% for link in config.extra.links %}{% if link.label != contact.label %}<a href="{{ link.url }}">{{ link.label }}</a>{% endif %}{% endfor %}
+    <a href="{{ get_url(path="/") }}">home</a>
+  </nav>
+</footer>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{{ get_url(path="caret.js", cachebust=true) }}" defer></script>
+{% endblock scripts %}
