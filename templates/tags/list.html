@@ -3,21 +3,21 @@
 {% block title %}{{ config.extra.ui.tags_label }} &middot; {{ config.title }}{% endblock title %}
 {% block description %}all tags{% endblock description %}
 
-{% block content %}
-<header class="header">
-  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
-</header>
+{% block body_class %}page--big{% endblock body_class %}
 
-<main class="writing">
-  <p class="section-label">{{ config.extra.ui.tags_label }}</p>
-  <div class="tags-row">
+{% block content %}
+<main class="page">
+  <div class="page-head">
+    <h1 class="display">{{ config.extra.ui.tags_label }}</h1>
+    <p>the same <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.writing_label }}</a>, sorted by what it&rsquo;s about.</p>
+  </div>
+  <div class="post-list">
     {% for term in terms %}
-    <a class="tag" href="{{ term.permalink }}">{{ term.name }}</a>
+    <a class="post-row" href="{{ term.permalink }}">
+      <span class="post-row-title">{{ term.name }}</span>
+      <span class="mono">{{ term.pages | length }} {{ term.pages | length | pluralize(singular="post", plural="posts") }}</span>
+    </a>
     {% endfor %}
   </div>
 </main>
-
-<footer class="footer">
-  <span class="prompt">$</span> <a href="{{ get_url(path="/") }}">{{ config.extra.ui.back_to_index }}</a>
-</footer>
 {% endblock content %}

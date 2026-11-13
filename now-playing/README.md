@@ -5,9 +5,11 @@ Polls the site owner's Spotify account and exposes one endpoint:
 
 `GET /now-playing` → `{"playing":true,"track":"...","artist":"..."}` when
 something's currently playing; otherwise falls back to Spotify's play
-history, returning `{"playing":false,"track":"...","artist":"..."}` for
-the last-played track, or bare `{"playing":false}` if even that's
-unavailable.
+history, returning
+`{"playing":false,"track":"...","artist":"...","played_at":"..."}` for
+the last-played track (`played_at` is Spotify's RFC 3339 timestamp, which
+the site turns into "12 minutes ago"), or bare `{"playing":false}` if
+even that's unavailable.
 
 - `go build .` / `go run .` — needs `SPOTIFY_CLIENT_ID`,
   `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN` set; `ALLOWED_ORIGIN`

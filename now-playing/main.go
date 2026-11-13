@@ -25,6 +25,9 @@ type nowPlayingResponse struct {
 	Track   string `json:"track,omitempty"`
 	Artist  string `json:"artist,omitempty"`
 	URL     string `json:"url,omitempty"`
+	// PlayedAt is only set for the last-played fallback, as Spotify's
+	// RFC 3339 timestamp, so the site can say how long ago that was.
+	PlayedAt string `json:"played_at,omitempty"`
 }
 
 type spotifyTrack struct {
@@ -220,7 +223,8 @@ func (s *service) lastPlayed() nowPlayingResponse {
 
 	var payload struct {
 		Items []struct {
-			Track spotifyTrack `json:"track"`
+			Track    spotifyTrack `json:"track"`
+			PlayedAt string       `json:"played_at"`
 		} `json:"items"`
 	}
 	if err := json.NewDecoder(res.Body).Decode(&payload); err != nil {
@@ -231,7 +235,9 @@ func (s *service) lastPlayed() nowPlayingResponse {
 		return none
 	}
 
-	return payload.Items[0].Track.response(false)
+	resp := payload.Items[0].Track.response(false)
+	resp.PlayedAt = payload.Items[0].PlayedAt
+	return resp
 }
 
 func (s *service) accessToken() (string, error) {

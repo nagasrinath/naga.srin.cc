@@ -1,60 +1,72 @@
 (function () {
-  var bar = document.getElementById("now-playing");
-  var inner = document.getElementById("now-playing-inner");
-  if (!bar || !inner) return;
+  var line = document.getElementById("now-playing");
+  if (!line) return;
 
   var ENDPOINT = "https://api.srin.cc/now-playing";
   var POLL_MS = 30000;
 
   function bars() {
     var wrap = document.createElement("span");
-    wrap.className = "now-playing-bars";
+    wrap.className = "eq";
     wrap.setAttribute("aria-hidden", "true");
-    for (var i = 0; i < 3; i++) {
-      var b = document.createElement("span");
-      b.className = "bar";
-      wrap.appendChild(b);
-    }
+    for (var i = 0; i < 3; i++) wrap.appendChild(document.createElement("span"));
     return wrap;
   }
 
-  function label(icon, text) {
-    var span = document.createElement("span");
-    span.className = "now-playing-label";
-    if (icon) {
-      span.appendChild(icon);
-      span.appendChild(document.createTextNode(text));
-    } else {
-      span.textContent = text;
-    }
-    return span;
+  function text(s) {
+    return document.createTextNode(s);
+  }
+
+  function plural(n, unit) {
+    return n + " " + unit + (n === 1 ? "" : "s") + " ago";
+  }
+
+  function ago(iso) {
+    var then = Date.parse(iso);
+    if (isNaN(then)) return "";
+    var mins = Math.floor((Date.now() - then) / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return plural(mins, "minute");
+    var hours = Math.floor(mins / 60);
+    if (hours < 24) return plural(hours, "hour");
+    return plural(Math.floor(hours / 24), "day");
   }
 
   function render(data) {
-    inner.textContent = "";
+    line.textContent = "";
 
     if (!data || !data.track) {
-      inner.appendChild(label(null, "♪ no signal"));
+      line.hidden = true;
       return;
     }
 
     if (data.playing) {
-      inner.appendChild(label(bars(), " now listening: "));
+      line.appendChild(bars());
+      line.appendChild(text("listening to "));
     } else {
-      inner.appendChild(label(null, "♪ was listening: "));
+      line.appendChild(text("was listening to "));
     }
 
-    var text = data.artist ? data.track + " — " + data.artist : data.track;
     if (data.url) {
       var link = document.createElement("a");
       link.href = data.url;
       link.target = "_blank";
       link.rel = "noopener";
-      link.textContent = text;
-      inner.appendChild(link);
+      link.textContent = data.track;
+      line.appendChild(link);
     } else {
-      inner.appendChild(document.createTextNode(text));
+      line.appendChild(text(data.track));
     }
+
+    var tail = (data.artist ? " by " + data.artist : "") + " on spotify";
+    if (data.playing) {
+      tail += ", right now.";
+    } else {
+      var when = data.played_at ? ago(data.played_at) : "";
+      tail += when ? ", " + when + "." : ".";
+    }
+    line.appendChild(text(tail));
+    line.hidden = false;
   }
 
   function refresh() {

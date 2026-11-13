@@ -9,23 +9,35 @@
 <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock og_description %}">
 <meta property="og:image" content="{{ config.extra.avatar_url }}">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#f4f5fb" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111422" media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/svg+xml" href="{{ get_url(path="favicon.svg", cachebust=true) }}">
+<meta name="theme-color" content="#f0eee9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0f18" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="{{ get_url(path="img/mark-light.png", cachebust=true) }}" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="{{ get_url(path="img/mark-dark.png", cachebust=true) }}" media="(prefers-color-scheme: dark)">
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
+{# a saved theme choice has to land before first paint, so this one stays inline #}
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
 {% block head %}{% endblock head %}
 </head>
-<body data-location="{{ config.extra.location }}">
-<div class="column {% block column_class %}{% endblock column_class %}">
+<body class="{% block body_class %}{% endblock body_class %}">
+{% set path = current_path | default(value="") %}
+<header class="site-header">
+  <a class="brand" href="{{ get_url(path="/") }}"><span class="mark" aria-hidden="true"></span>{{ config.title }}</a>
+  <nav class="site-nav" aria-label="site">
+    {% if config.extra.blog_enabled %}
+    <a href="{{ get_url(path="blog") }}"{% if path == "/blog/" %} aria-current="page"{% endif %}>{{ config.extra.ui.writing_label }}</a>
+    {% endif %}
+    <a href="{{ get_url(path="hire") }}"{% if path == "/hire/" %} aria-current="page"{% endif %}>hire me</a>
+    <button class="theme-toggle" id="theme-toggle" type="button" hidden><span class="to-dark">dark</span><span class="to-light">light</span></button>
+  </nav>
+</header>
 {% block content %}{% endblock content %}
-</div>
-{% block scripts %}
-<script src="{{ get_url(path="caret.js", cachebust=true) }}" defer></script>
+{% block footer %}
+<footer class="site-footer mono">{% include "status-line.html" %}</footer>
+{% endblock footer %}
+<script src="{{ get_url(path="theme.js", cachebust=true) }}" defer></script>
 <script src="{{ get_url(path="uptime.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="typewriter.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="terminal.js", cachebust=true) }}" defer></script>
-<script src="{{ get_url(path="spotify.js", cachebust=true) }}" defer></script>
-{% endblock scripts %}
+<script src="{{ get_url(path="clock.js", cachebust=true) }}" defer></script>
+{% block scripts %}{% endblock scripts %}
 </body>
 </html>

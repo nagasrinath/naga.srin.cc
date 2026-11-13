@@ -14,9 +14,7 @@ taxonomies = [
 [markdown]
 insert_anchor_links = "right"
 
-[markdown.highlighting]
-enabled = true
-theme = "nord"
+# no [markdown.highlighting]: code blocks are set in the page's two colours
 
 [extra]
 author = "naga"
@@ -24,31 +22,30 @@ blog_enabled = true
 # reference date the footer "uptime" counter counts up from
 dob = "2005-05"
 
-location = "📍 hyd"
+location = "hyd"
 avatar_url = "https://cdn.srin.cc/photos/naga-avatar.png"
 avatar_alt = "portrait of naga"
-footer_status = "still here, still self-hosting "
+footer_status = "still here, still self-hosting"
 
+email = "hi@srin.cc"
+
+headline = "i build and break systems, then run them on hardware i can hear."
 bio = [
-  "i build and break systems, then run them on hardware i can hear. mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
-  "self-hosting maximalist. nix-darwin on the laptop, too many services on the rack.",
+  "mostly linux, docker/k8s, and lately a lot of agents talking to each other.",
+  "self-hosting maximalist: nix-darwin on the laptop, too many services on the rack.",
 ]
-
-[[extra.links]]
-label = "github"
-url = "https://github.com/nagasrinath"
 
 [[extra.links]]
 label = "tangled"
 url = "https://tangled.org/srin.cc"
 
 [[extra.links]]
-label = "hi@srin.cc"
-url = "mailto:hi@srin.cc"
+label = "github"
+url = "https://github.com/nagasrinath"
 
 [extra.ui]
 writing_label = "writing"
 tags_label = "tags"
 all_posts = "all posts"
 back_to_index = "back to index"
-not_found = "no such file or directory"
+not_found = "nothing’s running here."

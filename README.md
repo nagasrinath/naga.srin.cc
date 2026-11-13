@@ -22,8 +22,8 @@ Add `content/blog/<slug>.md` with `title`, `date`, `description`,
 
 ## Palette / uptime
 
-Light/dark tokens in `sass/style.scss`, derived from the avatar's colors
-(`extra.avatar_url` in `config.toml`, hosted externally), switching
-automatically via `prefers-color-scheme`. Uptime counts
-from `extra.dob` in
-`config.toml`, recomputed client-side by `static/uptime.js`.
+Two colours per theme (a ground and an ink) as tokens at the top of
+`sass/style.scss`, along with the per-theme mark and portraits in
+`static/img/`. The theme follows `prefers-color-scheme` until the nav
+toggle (`static/theme.js`) saves a choice. Uptime counts from `extra.dob`
+in `config.toml`, recomputed client-side by `static/uptime.js`.

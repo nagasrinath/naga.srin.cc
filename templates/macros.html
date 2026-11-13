@@ -1,0 +1,18 @@
+{# post rows under a mono year heading, newest first #}
+{% macro post_rows(pages) %}
+{% set_global prev_year = 0 %}
+{% for page in pages %}
+{% if page.year != prev_year %}
+{% if not loop.first %}</div></section>{% endif %}
+<section class="year">
+  <h2>{{ page.year }}</h2>
+  <div class="post-list">
+{% set_global prev_year = page.year %}
+{% endif %}
+    <a class="post-row" href="{{ page.permalink }}">
+      <span class="post-row-title">{{ page.title }}</span>
+      <time class="mono" datetime="{{ page.date }}">{{ page.date | date(format="%b %d") | lower }}</time>
+    </a>
+{% if loop.last %}</div></section>{% endif %}
+{% endfor %}
+{% endmacro post_rows %}

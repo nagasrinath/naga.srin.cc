@@ -6,28 +6,36 @@
 {% block og_description %}{{ page.description }}{% endblock og_description %}
 
 {% block content %}
-<header class="header">
-  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
-</header>
-
-<main>
-  <article>
-    <header class="post-header">
-      <p class="post-meta">
-        <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
-        {% for tag in page.taxonomies.tags | default(value=[]) %}
-        <a class="tag" href="{{ get_taxonomy_url(kind="tags", name=tag) }}">{{ tag }}</a>
-        {% endfor %}
+<div class="read">
+  <main class="post">
+    <article>
+      <p class="post-meta mono">
+        <time datetime="{{ page.date }}">{{ page.date | date(format="%b %d, %Y") | lower }}</time> &middot; {{ page.reading_time }} min read
+        {%- for tag in page.taxonomies.tags | default(value=[]) %}{% if loop.first %} &middot; {% else %}, {% endif %}<a href="{{ get_taxonomy_url(kind="tags", name=tag) }}">{{ tag }}</a>{% endfor %}
       </p>
-      <h1 class="post-title-main">{{ page.title }}</h1>
-    </header>
-    <div class="prose">
-      {{ page.content | safe }}
-    </div>
-  </article>
-</main>
+      <h1 class="display">{{ page.title }}</h1>
+      <div class="prose">
+        {{ page.content | safe }}
+      </div>
+    </article>
 
-<footer class="footer">
-  <span class="prompt">$</span> <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.back_to_index }}</a>
-</footer>
+    <div class="post-end">
+      <p>disagree? good. tell me at <a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a>.</p>
+      <nav class="post-nav" aria-label="more posts">
+        <a href="{{ get_url(path="blog") }}">&larr; all {{ config.extra.ui.writing_label }}</a>
+        {% if page.lower %}<a href="{{ page.lower.permalink }}">{{ page.lower.title }} &rarr;</a>{% endif %}
+      </nav>
+    </div>
+  </main>
+
+  <aside class="rail" aria-label="in this post">
+    {% if page.toc %}
+    <span class="mono">in this post</span>
+    {% for h in page.toc %}
+    <a href="{{ h.permalink }}">{{ h.title }}</a>
+    {% endfor %}
+    {% endif %}
+    <a class="rail-back" href="{{ get_url(path="blog") }}">&larr; all {{ config.extra.ui.writing_label }}</a>
+  </aside>
+</div>
 {% endblock content %}

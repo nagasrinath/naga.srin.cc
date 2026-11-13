@@ -1,29 +1,17 @@
 {% extends "base.html" %}
+{% import "macros.html" as macros %}
 
 {% block title %}{{ term.name }} &middot; {{ config.title }}{% endblock title %}
 {% block description %}posts tagged {{ term.name }}{% endblock description %}
 
+{% block body_class %}page--big{% endblock body_class %}
+
 {% block content %}
-<header class="header">
-  <a class="back-link" href="{{ get_url(path="/") }}">&larr; {{ config.title }}</a>
-</header>
-
-<main class="writing">
-  <p class="section-label">tag: {{ term.name }}</p>
-  <div class="post-list">
-    {% for page in term.pages %}
-    <a class="post-row" href="{{ page.permalink }}">
-      <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
-      <span class="post-title">{{ page.title }}</span>
-      {% if page.description %}
-      <span class="post-desc">{{ page.description }}</span>
-      {% endif %}
-    </a>
-    {% endfor %}
+<main class="page">
+  <div class="page-head">
+    <h1 class="display">{{ term.name }}</h1>
+    <p>everything tagged {{ term.name }}. see <a href="{{ get_url(path="tags") }}">all {{ config.extra.ui.tags_label }}</a> or <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.all_posts }}</a>.</p>
   </div>
+  {{ macros::post_rows(pages=term.pages) }}
 </main>
-
-<footer class="footer">
-  <span class="prompt">$</span> <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.back_to_index }}</a>
-</footer>
 {% endblock content %}
