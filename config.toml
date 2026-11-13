@@ -28,6 +28,8 @@ avatar_alt = "portrait of naga"
 footer_status = "still here, still self-hosting"
 
 email = "hi@srin.cc"
+# the now-playing service (see now-playing/); remove this to drop the song line from the homepage
+now_playing_api = "https://api.srin.cc/now-playing"
 
 headline = "i build and break systems, then run them on hardware i can hear."
 bio = [

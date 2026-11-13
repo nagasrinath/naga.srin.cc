@@ -2,7 +2,8 @@
   var line = document.getElementById("now-playing");
   if (!line) return;
 
-  var ENDPOINT = "https://api.srin.cc/now-playing";
+  // set from config.toml by the template
+  var ENDPOINT = line.getAttribute("data-api");
   var POLL_MS = 30000;
 
   function bars() {
@@ -11,14 +12,6 @@
     wrap.setAttribute("aria-hidden", "true");
     for (var i = 0; i < 3; i++) wrap.appendChild(document.createElement("span"));
     return wrap;
-  }
-
-  // holds the line's place until the first response lands
-  function skeleton() {
-    var bar = document.createElement("span");
-    bar.className = "now-playing-skeleton";
-    bar.setAttribute("aria-hidden", "true");
-    return bar;
   }
 
   function text(s) {
@@ -77,16 +70,17 @@
     line.hidden = false;
   }
 
-  function refresh() {
-    fetch(ENDPOINT)
-      .then(function (res) { return res.json(); })
-      .then(render)
-      .catch(function () { render(null); });
+  function show(answer) {
+    answer.then(render).catch(function () { render(null); });
   }
 
-  line.appendChild(skeleton());
-  line.hidden = false;
+  function refresh() {
+    show(fetch(ENDPOINT).then(function (res) { return res.json(); }));
+  }
 
-  refresh();
+  // the page ships with a skeleton in the line and has already asked for the
+  // first answer from <head>; the first render replaces the skeleton
+  if (window.nowPlaying) show(window.nowPlaying);
+  else refresh();
   setInterval(refresh, POLL_MS);
 })();

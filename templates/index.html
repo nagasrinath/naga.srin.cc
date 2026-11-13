@@ -2,10 +2,24 @@
 
 {% block body_class %}page--big{% endblock body_class %}
 
+{% block head_early %}
+{% if config.extra.now_playing_api %}
+{# asked for the moment the page arrives, so the answer is usually in before the entrance has to wait on it; spotify.js picks this up #}
+<script>window.nowPlaying = fetch({{ config.extra.now_playing_api | json_encode() | safe }}).then(function (r) { return r.json() }); window.nowPlaying.catch(function () {})</script>
+{% endif %}
+{% endblock head_early %}
+
 {% block content %}
 <div class="home">
-<main class="home-main stagger">
-  <h1 class="display">{{ config.extra.headline }}</h1>
+<main class="home-main stagger stagger--words">
+  {# one box per word so each can come into focus on its own beat; the label keeps it one sentence for screen readers #}
+  <h1 class="display" aria-label="{{ config.extra.headline }}">
+    <span aria-hidden="true">
+      {%- for word in config.extra.headline | split(pat=" ") %}
+      <span class="w"><span style="--i: {{ loop.index0 }}">{{ word }}</span></span>
+      {%- endfor %}
+    </span>
+  </h1>
   <p>{{ config.extra.bio | join(sep=" ") }}</p>
 
   {% if config.extra.blog_enabled %}
@@ -16,8 +30,10 @@
   {% endif %}
   {% endif %}
 
-  {# spotify.js shows a skeleton here, then the track; hidden again when the api has nothing #}
-  <p class="now-playing" id="now-playing" hidden></p>
+  {% if config.extra.now_playing_api %}
+  {# holds its place with a skeleton from first paint; spotify.js swaps in the track, or hides the line when the api has nothing #}
+  <p class="now-playing" id="now-playing" data-api="{{ config.extra.now_playing_api }}"><span class="now-playing-skeleton" aria-hidden="true"></span></p>
+  {% endif %}
 
   <p>i&rsquo;m on
     {%- for link in config.extra.links %}{% if loop.last and not loop.first %} and{% elif not loop.first %},{% endif %} <a href="{{ link.url }}">{{ link.label }}</a>{% endfor %}. and i&rsquo;m <a href="{{ get_url(path="hire") }}">open to work</a>, so say <a href="mailto:{{ config.extra.email }}"><strong>{{ config.extra.email }}</strong></a>.</p>
@@ -32,5 +48,8 @@
 {% block footer %}{% endblock footer %}
 
 {% block scripts %}
-<script src="{{ get_url(path="spotify.js", cachebust=true) }}" defer></script>
+{% if config.extra.now_playing_api %}
+{# if the script itself never arrives, nothing would ever replace the skeleton #}
+<script src="{{ get_url(path="spotify.js", cachebust=true) }}" defer onerror="document.getElementById('now-playing').hidden = true"></script>
+{% endif %}
 {% endblock scripts %}

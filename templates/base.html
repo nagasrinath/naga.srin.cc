@@ -14,9 +14,20 @@
 <link rel="icon" type="image/png" href="{{ get_url(path="img/mark-light.png", cachebust=true) }}" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="{{ get_url(path="img/mark-dark.png", cachebust=true) }}" media="(prefers-color-scheme: dark)">
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
-{# a saved theme choice has to land before first paint, so this one stays inline #}
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+{# asked for along with the page: the entrance waits for these two to arrive #}
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ get_url(path="fonts/BricolageGrotesque-latin.woff2") }}">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ get_url(path="fonts/FragmentMono-latin.woff2") }}">
+{# two things have to land before first paint, so they stay inline: a saved theme choice, and the hold that keeps
+   every entrance at its first frame until entrance.js lifts it (the timer lifts it regardless, should that script never run) #}
+<script>
+try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}
+document.documentElement.classList.add("hold");setTimeout(function(){document.documentElement.classList.remove("hold")},3000)
+</script>
+{# for whatever a page has to start before the stylesheet is in: an inline script placed after it would wait for it #}
+{% block head_early %}{% endblock head_early %}
 <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
+{# the theme toggle and the now-playing line are in the layout from first paint, so nothing moves when their scripts land; without scripts they'd do nothing, so leave them out #}
+<noscript><style>.theme-toggle, .now-playing { display: none; }</style></noscript>
 {% block head %}{% endblock head %}
 </head>
 <body class="{% block body_class %}{% endblock body_class %}">
@@ -28,13 +39,14 @@
     <a href="{{ get_url(path="blog") }}"{% if path == "/blog/" %} aria-current="page"{% endif %}>{{ config.extra.ui.writing_label }}</a>
     {% endif %}
     <a href="{{ get_url(path="hire") }}"{% if path == "/hire/" %} aria-current="page"{% endif %}>hire me</a>
-    <button class="theme-toggle" id="theme-toggle" type="button" hidden><span class="to-dark">dark</span><span class="to-light">light</span></button>
+    <button class="theme-toggle" id="theme-toggle" type="button"><span class="to-dark">dark</span><span class="to-light">light</span></button>
   </nav>
 </header>
 {% block content %}{% endblock content %}
 {% block footer %}
 <footer class="site-footer mono">{% include "status-line.html" %}</footer>
 {% endblock footer %}
+<script src="{{ get_url(path="entrance.js", cachebust=true) }}" defer></script>
 <script src="{{ get_url(path="theme.js", cachebust=true) }}" defer></script>
 <script src="{{ get_url(path="uptime.js", cachebust=true) }}" defer></script>
 <script src="{{ get_url(path="clock.js", cachebust=true) }}" defer></script>

@@ -124,31 +124,78 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: -0.01em;
 }
 
-/* ---- entrances: text rises in, staggered; the portrait inks in from the bottom ---- */
+/* ---- entrances: everything comes into focus, blurred to sharp, in a short stagger ----
+   (.stagger, .rise, .ink and .w keep the names the design gives them) */
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+@keyframes focus-in {
+  0% { opacity: 0; filter: blur(16px); transform: translateY(10px); }
+  55% { opacity: 1; }
+  100% { opacity: 1; filter: none; transform: none; }
 }
-@keyframes ink {
-  from { clip-path: inset(100% 0 0 0); }
-  to { clip-path: inset(0 0 0 0); }
+@keyframes focus-in-soft {
+  0% { opacity: 0; filter: blur(8px); transform: translateY(8px); }
+  55% { opacity: 1; }
+  100% { opacity: 1; filter: none; transform: none; }
 }
-// the headline stays put; everything after it follows in order
+@keyframes focus-in-portrait {
+  0% { opacity: 0; filter: blur(28px); transform: scale(1.06); }
+  45% { opacity: 1; }
+  100% { opacity: 1; filter: none; transform: none; }
+}
+$settle: cubic-bezier(0.16, 1, 0.3, 1);
+
+// the headline leads and whatever follows it comes in behind, in order.
+// `backwards` holds each one out of sight until its turn, then lets go.
+.stagger > h1 { animation: focus-in 0.9s $settle backwards; }
 .rise,
-.stagger > :not(h1) { animation: rise 0.45s cubic-bezier(0, 0, 0.2, 1) both; }
-.stagger > :nth-child(2) { animation-delay: 0.05s; }
-.stagger > :nth-child(3) { animation-delay: 0.1s; }
-.stagger > :nth-child(4) { animation-delay: 0.15s; }
-.stagger > :nth-child(5) { animation-delay: 0.2s; }
-.stagger > :nth-child(n + 6) { animation-delay: 0.25s; }
+.stagger > :not(h1) { animation: focus-in-soft 0.8s $settle backwards; }
+.stagger > :nth-child(2) { animation-delay: 0.08s; }
+.stagger > :nth-child(3) { animation-delay: 0.16s; }
+.stagger > :nth-child(4) { animation-delay: 0.24s; }
+.stagger > :nth-child(5) { animation-delay: 0.32s; }
+.stagger > :nth-child(n + 6) { animation-delay: 0.4s; }
 .rise { animation-delay: 0.2s; }
 .page > .rise { animation-delay: 0.1s; }
-.ink { animation: ink 0.6s cubic-bezier(0, 0, 0.2, 1) both; }
+.ink { animation: focus-in-portrait 1.2s $settle 0.15s backwards; }
+
+// home: the headline arrives a word at a time (--i is the word's index),
+// and everything else waits for it
+.w,
+.w > span { display: inline-block; }
+.w > span { animation: focus-in 0.9s $settle calc(var(--i, 0) * 45ms) backwards; }
+.stagger--words > h1 { animation: none; }
+.stagger--words > :nth-child(2) { animation-delay: 0.4s; }
+.stagger--words > :nth-child(3) { animation-delay: 0.47s; }
+.stagger--words > :nth-child(4) { animation-delay: 0.54s; }
+.stagger--words > :nth-child(5) { animation-delay: 0.61s; }
+.stagger--words > :nth-child(n + 6) { animation-delay: 0.68s; }
+.stagger--words ~ .ink { animation-duration: 1.3s; animation-delay: 0.2s; }
+
+// posts: the opening blocks take a beat each, then the rest arrives together
+.stagger > .prose { animation: none; }
+.stagger > .prose > * { animation: focus-in-soft 0.8s $settle 0.4s backwards; }
+.stagger > .prose > :nth-child(1) { animation-delay: 0.16s; }
+.stagger > .prose > :nth-child(2) { animation-delay: 0.24s; }
+.stagger > .prose > :nth-child(3) { animation-delay: 0.32s; }
+.post > .rise { animation-delay: 0.4s; }
+
+// while <html> has .hold, every entrance waits at its first frame, out of sight. the script in
+// <head> sets it before first paint and entrance.js lifts it once the fonts and the song line
+// are in, so the text never moves while it is coming into focus.
+.hold .rise,
+.hold .ink,
+.hold .stagger > h1,
+.hold .stagger > :not(h1),
+.hold .stagger > .prose > *,
+.hold .w > span { animation-play-state: paused; }
+
 @media (prefers-reduced-motion: reduce) {
   .rise,
+  .ink,
+  .stagger > h1,
   .stagger > :not(h1),
-  .ink { animation: none; }
+  .stagger > .prose > *,
+  .w > span { animation: none; }
 }
 
 /* ---- chrome ---- */
