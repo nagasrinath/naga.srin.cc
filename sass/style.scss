@@ -1,5 +1,6 @@
 // two colours per theme: a ground and an ink. rules are the ink at ~30%.
 // the mark and avatars are drawn per theme, so they ride along as tokens.
+// (keep the -light / -dark file names: theme.js uses them to fetch the other theme's art)
 @mixin light {
   --bg: #f0eee9;
   --ink: #0029e8;
@@ -254,6 +255,20 @@ $settle: cubic-bezier(0.16, 1, 0.3, 1);
 }
 :root[data-theme="dark"] .theme-toggle .to-dark { display: none; }
 :root[data-theme="dark"] .theme-toggle .to-light { display: inline; }
+
+// switching theme: the new one opens out in a circle from the toggle, over the old one.
+// theme.js starts the view transition and sets --tx / --ty to the toggle's centre.
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--tx, 100%) var(--ty, 0px)); }
+  to { clip-path: circle(150vmax at var(--tx, 100%) var(--ty, 0px)); }
+}
+::view-transition-old(root),
+::view-transition-new(root) { mix-blend-mode: normal; }
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) { animation: theme-reveal 0.65s cubic-bezier(0.4, 0, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) { animation: none; }
+}
 
 .site-footer {
   width: 100%;
