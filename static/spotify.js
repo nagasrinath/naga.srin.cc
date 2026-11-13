@@ -13,6 +13,14 @@
     return wrap;
   }
 
+  // holds the line's place until the first response lands
+  function skeleton() {
+    var bar = document.createElement("span");
+    bar.className = "now-playing-skeleton";
+    bar.setAttribute("aria-hidden", "true");
+    return bar;
+  }
+
   function text(s) {
     return document.createTextNode(s);
   }
@@ -75,6 +83,9 @@
       .then(render)
       .catch(function () { render(null); });
   }
+
+  line.appendChild(skeleton());
+  line.hidden = false;
 
   refresh();
   setInterval(refresh, POLL_MS);

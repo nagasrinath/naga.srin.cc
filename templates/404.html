@@ -7,13 +7,13 @@
 
 {% block content %}
 <div class="home home--404">
-<main class="home-main">
+<main class="home-main stagger">
   <p class="mono">404</p>
   <h1 class="display">{{ config.extra.ui.not_found }}</h1>
   <p>either the link is wrong or i moved something and forgot. try the <a href="{{ get_url(path="/") }}">home page</a>{% if config.extra.blog_enabled %} or <a href="{{ get_url(path="blog") }}">the {{ config.extra.ui.writing_label }}</a>{% endif %}, or tell me at <a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a> and i&rsquo;ll fix it.</p>
 </main>
 
-<div class="home-avatar" aria-hidden="true"></div>
+<div class="home-avatar ink" aria-hidden="true"></div>
 </div>
 {% endblock content %}
 

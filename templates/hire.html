@@ -15,14 +15,14 @@
 
 <div class="read">
 <main class="hire">
-  <section class="hire-intro">
+  <section class="hire-intro stagger">
     <h1 class="display">taking new work from {{ x.available_from }}. {{ slots }} open.</h1>
     <p class="lede">{{ x.intro }}</p>
     <p class="lede">{{ x.based }} {% if x.booking_url %}<a href="{{ x.booking_url }}">book a free <span class="nowrap">15-minute</span> call</a> or write{% else %}write{% endif %} to <a href="mailto:{{ email }}">{{ email }}</a>. i reply within a day.</p>
     <p class="mono">updated <time datetime="{{ page.updated }}">{{ page.updated | date(format="%Y-%m-%d") }}</time></p>
   </section>
 
-  <section>
+  <section class="rise">
     <h2 class="h2">what i build</h2>
     <div class="hire-cols">
       {% for item in x.scope %}
@@ -35,7 +35,7 @@
     <p class="hire-stack mono">{{ x.stack }}</p>
   </section>
 
-  <section>
+  <section class="rise">
     <h2 class="h2">what i&rsquo;ve shipped</h2>
     {% set w = x.work %}
     <div class="hire-work">
@@ -52,7 +52,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="rise">
     <h2 class="h2">pricing</h2>
     <div class="hire-prices">
       {% for plan in x.pricing.plans %}
@@ -66,7 +66,7 @@
     <p class="hire-note">{{ x.pricing.note }}</p>
   </section>
 
-  <section>
+  <section class="rise">
     <h2 class="h2">how it goes</h2>
     <ol class="hire-steps">
       {% for st in x.method.steps %}
@@ -75,7 +75,7 @@
     </ol>
   </section>
 
-  <section class="hire-fit">
+  <section class="hire-fit rise">
     <div>
       <h2 class="h2">a good fit</h2>
       <p>{{ x.fit.good }}</p>
@@ -89,7 +89,7 @@
   </section>
 
   {% if x.faqs %}
-  <section>
+  <section class="rise">
     <h2 class="h2">questions</h2>
     <div class="hire-faq">
       {% for f in x.faqs %}
@@ -102,14 +102,14 @@
   </section>
   {% endif %}
 
-  <section class="hire-contact">
+  <section class="hire-contact rise">
     <p>say hi:</p>
     <a class="hire-email" href="mailto:{{ email }}">{{ email }}</a>
     <p class="hire-or">or {% if x.booking_url %}<a href="{{ x.booking_url }}">grab 15 minutes on my calendar</a>, or {% endif %}look around my <a href="{{ github.url }}">github</a> first.</p>
   </section>
 </main>
 
-<aside class="rail rail--hire" aria-label="get in touch">
+<aside class="rail rail--hire rise" aria-label="get in touch">
   <span class="mono">right now</span>
   <strong>{{ slots }} open from {{ x.available_from }}.</strong>
   {% if x.booking_url %}<a href="{{ x.booking_url }}">book a free 15-minute call</a>{% endif %}

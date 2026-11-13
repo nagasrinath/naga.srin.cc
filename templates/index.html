@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="home">
-<main class="home-main">
+<main class="home-main stagger">
   <h1 class="display">{{ config.extra.headline }}</h1>
   <p>{{ config.extra.bio | join(sep=" ") }}</p>
 
@@ -16,7 +16,7 @@
   {% endif %}
   {% endif %}
 
-  {# filled in by spotify.js; stays hidden when the api has nothing #}
+  {# spotify.js shows a skeleton here, then the track; hidden again when the api has nothing #}
   <p class="now-playing" id="now-playing" hidden></p>
 
   <p>i&rsquo;m on
@@ -25,7 +25,7 @@
   <p class="status mono">{% include "status-line.html" %}</p>
 </main>
 
-<div class="home-avatar" role="img" aria-label="{{ config.extra.avatar_alt }}"></div>
+<div class="home-avatar ink" role="img" aria-label="{{ config.extra.avatar_alt }}"></div>
 </div>
 {% endblock content %}
 

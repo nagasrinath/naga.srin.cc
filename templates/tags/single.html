@@ -8,7 +8,7 @@
 
 {% block content %}
 <main class="page">
-  <div class="page-head">
+  <div class="page-head stagger">
     <h1 class="display">{{ term.name }}</h1>
     <p>everything tagged {{ term.name }}. see <a href="{{ get_url(path="tags") }}">all {{ config.extra.ui.tags_label }}</a> or <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.all_posts }}</a>.</p>
   </div>

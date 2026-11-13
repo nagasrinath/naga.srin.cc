@@ -7,11 +7,11 @@
 
 {% block content %}
 <main class="page">
-  <div class="page-head">
+  <div class="page-head stagger">
     <h1 class="display">{{ config.extra.ui.tags_label }}</h1>
     <p>the same <a href="{{ get_url(path="blog") }}">{{ config.extra.ui.writing_label }}</a>, sorted by what it&rsquo;s about.</p>
   </div>
-  <div class="post-list">
+  <div class="post-list rise">
     {% for term in terms %}
     <a class="post-row" href="{{ term.permalink }}">
       <span class="post-row-title">{{ term.name }}</span>

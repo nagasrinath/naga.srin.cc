@@ -4,7 +4,7 @@
 {% for page in pages %}
 {% if page.year != prev_year %}
 {% if not loop.first %}</div></section>{% endif %}
-<section class="year">
+<section class="year rise">
   <h2>{{ page.year }}</h2>
   <div class="post-list">
 {% set_global prev_year = page.year %}

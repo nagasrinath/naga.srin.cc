@@ -124,6 +124,33 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: -0.01em;
 }
 
+/* ---- entrances: text rises in, staggered; the portrait inks in from the bottom ---- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes ink {
+  from { clip-path: inset(100% 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+// the headline stays put; everything after it follows in order
+.rise,
+.stagger > :not(h1) { animation: rise 0.45s cubic-bezier(0, 0, 0.2, 1) both; }
+.stagger > :nth-child(2) { animation-delay: 0.05s; }
+.stagger > :nth-child(3) { animation-delay: 0.1s; }
+.stagger > :nth-child(4) { animation-delay: 0.15s; }
+.stagger > :nth-child(5) { animation-delay: 0.2s; }
+.stagger > :nth-child(n + 6) { animation-delay: 0.25s; }
+.rise { animation-delay: 0.2s; }
+.page > .rise { animation-delay: 0.1s; }
+.ink { animation: ink 0.6s cubic-bezier(0, 0, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .stagger > :not(h1),
+  .ink { animation: none; }
+}
+
 /* ---- chrome ---- */
 
 .site-header {
@@ -249,6 +276,23 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .now-playing a { overflow-wrap: anywhere; }
+.now-playing-skeleton {
+  display: inline-block;
+  width: min(18em, 100%);
+  height: 0.7em;
+  background: var(--ink);
+  border-radius: 3px;
+  vertical-align: baseline;
+  opacity: 0.2;
+  animation: skeleton-pulse 1.3s ease-in-out infinite;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-playing-skeleton { animation: none; }
+}
 .eq {
   display: inline-flex;
   align-items: flex-end;
