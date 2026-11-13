@@ -1,5 +1,5 @@
 +++
-title = "tiling window managers suck 🥀"
+title = "tiling window managers suck"
 date = 2026-07-22
 description = "why i stopped using tiling window managers on macOS."
 
